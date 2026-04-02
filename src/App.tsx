@@ -451,20 +451,29 @@ Chỉ JSON.`,
               <a key={l} className="nav-link" onClick={() => scrollTo(id)}>{l}</a>
             ))}
           </div>
-          <button className="nav-cta" onClick={() => scrollTo("translator")}>Dịch Ngay</button>
+          <button className="nav-cta" onClick={() => scrollTo("translator")}>Analyze Document</button>
         </div>
       </nav>
 
       {/* HERO */}
       <section id="hero" className="hero">
-        <video ref={videoRef} className="hero-video" autoPlay loop muted playsInline poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-          <source src="/hero.mp4" type="video/mp4" />
-        </video>
+        <video 
+          ref={videoRef} 
+          className="hero-video" 
+          src="/hero.mp4" 
+          autoPlay 
+          loop 
+          muted 
+          playsInline 
+        />
         <div className="hero-overlay" />
         <div className="hero-content">
           <div className="hero-name"><span>Ngọc </span><em>Phúc</em></div>
-          <p className="hero-tagline">a storyteller, AI builder, and digital creative.<br />i blend human creativity with intelligence to build things that matter.</p>
-          <button className="hero-cta" onClick={() => scrollTo("news")}>See What I'm Building ↓</button>
+          <p className="hero-tagline">
+            AI architect - AI developer - Experience designer<br />
+            I blend human creativity with intelligence to build things that matter.
+          </p>
+          <button className="hero-cta" onClick={() => scrollTo("news")}>My Creations ↓</button>
         </div>
       </section>
 
@@ -529,7 +538,7 @@ Chỉ JSON.`,
             <div className="translator-bottom">
               <span style={{fontSize:"0.78rem",color:"var(--muted)"}}>Powered by Claude Sonnet</span>
               <button className="ai-btn" onClick={translateDoc} disabled={transLoading || !inputText.trim()}>
-                {transLoading ? <span className="loading-dots">Đang dịch</span> : "✨ Dịch ngay"}
+                {transLoading ? <span className="loading-dots">Đang dịch</span> : "✨ Translate"}
               </button>
             </div>
             {(chatMsgs.length > 0 || translatedText) && (
