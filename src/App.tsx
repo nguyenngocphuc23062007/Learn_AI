@@ -43,10 +43,19 @@ const globalStyles = `
   .section-wrap.dark { background: #070b14; }
   .section-wrap.green { background: linear-gradient(to bottom, #0a1a0d, #070b14); }
 
-  .news-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
-  .news-card { border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 1.5rem; background: rgba(255,255,255,0.03); cursor: pointer; transition: background 0.2s, transform 0.2s; }
+  .news-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent; margin: 0 -2rem; padding: 0 2rem 1.25rem; }
+  .news-scroll::-webkit-scrollbar { height: 4px; }
+  .news-scroll::-webkit-scrollbar-track { background: transparent; }
+  .news-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 999px; }
+  .news-scroll-inner { display: flex; gap: 1.25rem; width: max-content; }
+  .news-card { width: 310px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 1.5rem; background: rgba(255,255,255,0.03); cursor: pointer; transition: background 0.2s, transform 0.2s; }
   .news-card:hover { background: rgba(255,255,255,0.07); transform: translateY(-3px); }
   .news-card.expanded { background: rgba(255,255,255,0.06); transform: none; border-color: rgba(168,230,207,0.25); }
+  .news-type-badge { display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 999px; }
+  .news-type-hot { background: rgba(248,113,113,0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+  .news-type-wiki { background: rgba(100,149,237,0.15); color: #6495ed; border: 1px solid rgba(100,149,237,0.25); }
+  .news-type-paper { background: rgba(251,191,36,0.1); color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+  .news-type-social { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.25); }
   .news-tag { display: inline-block; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 999px; background: rgba(168,230,207,0.15); color: var(--accent); border: 1px solid rgba(168,230,207,0.25); margin-bottom: 0.75rem; }
   .news-title { font-family: var(--font-name); font-size: 1.15rem; font-weight: 400; line-height: 1.3; margin-bottom: 0.6rem; }
   .news-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
@@ -63,16 +72,27 @@ const globalStyles = `
   .ai-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
   /* ARTICLE PAGE */
-  .article-page { position: fixed; inset: 0; background: #070b14; z-index: 200; overflow-y: auto; animation: slideUp 0.4s ease; }
+  .article-page { position: fixed; inset: 0; background: #070b14; z-index: 200; display: flex; flex-direction: column; animation: slideUp 0.4s ease; }
   @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-  .article-back { position: sticky; top: 0; background: rgba(7,11,20,0.9); backdrop-filter: blur(12px); padding: 1rem 2rem; display: flex; align-items: center; gap: 1rem; z-index: 10; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .article-back { background: rgba(7,11,20,0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 0.75rem 1.5rem; display: flex; align-items: center; gap: 1rem; z-index: 10; border-bottom: 1px solid rgba(255,255,255,0.06); flex-shrink: 0; }
   .article-back-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: var(--fg); border-radius: 999px; padding: 0.4rem 1rem; font-size: 0.8rem; cursor: pointer; font-family: var(--font-body); transition: background 0.2s; }
   .article-back-btn:hover { background: rgba(255,255,255,0.12); }
-  .article-inner { max-width: 760px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+  .article-split { display: flex; flex: 1; overflow: hidden; }
+  .article-split-left { flex: 1; overflow-y: auto; }
+  .article-split-right { width: 360px; flex-shrink: 0; border-left: 1px solid rgba(255,255,255,0.07); display: flex; flex-direction: column; background: rgba(0,0,0,0.25); }
+  .art-chat-header { padding: 0.9rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.07); font-size: 0.78rem; color: var(--muted); flex-shrink: 0; }
+  .art-chat-msgs { flex: 1; overflow-y: auto; padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; }
+  .art-chat-msg { padding: 0.6rem 0.85rem; border-radius: 10px; font-size: 0.82rem; line-height: 1.65; max-width: 92%; }
+  .art-chat-msg.user { background: rgba(168,230,207,0.12); color: var(--fg); align-self: flex-end; }
+  .art-chat-msg.ai { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.85); align-self: flex-start; }
+  .art-chat-input-row { padding: 0.75rem 1rem; border-top: 1px solid rgba(255,255,255,0.07); display: flex; gap: 0.5rem; flex-shrink: 0; }
+  .art-chat-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 0.5rem 0.85rem; color: var(--fg); font-family: var(--font-body); font-size: 0.82rem; outline: none; }
+  .art-chat-input::placeholder { color: rgba(255,255,255,0.25); }
+  .article-inner { max-width: 720px; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
   .article-tag { display: inline-block; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 999px; background: rgba(168,230,207,0.15); color: var(--accent); border: 1px solid rgba(168,230,207,0.25); margin-bottom: 1.25rem; }
   .article-title { font-family: var(--font-name); font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 400; line-height: 1.2; margin-bottom: 1rem; }
   .article-meta { font-size: 0.75rem; color: var(--muted); margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-  .article-img { width: 100%; height: 320px; border-radius: 16px; background: linear-gradient(135deg, rgba(168,230,207,0.08), rgba(255,255,255,0.04)); display: flex; align-items: center; justify-content: center; margin-bottom: 2.5rem; border: 1px solid rgba(255,255,255,0.06); overflow: hidden; position: relative; }
+  .article-img { width: 100%; height: 120px; border-radius: 12px; background: linear-gradient(135deg, rgba(168,230,207,0.08), rgba(255,255,255,0.04)); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.06); overflow: hidden; position: relative; }
   .article-img-loading { font-size: 0.85rem; color: var(--muted); }
   .article-body { font-size: 0.95rem; line-height: 1.95; color: rgba(255,255,255,0.85); }
   .article-body p { margin-bottom: 1.4rem; }
@@ -155,8 +175,11 @@ const globalStyles = `
 
   @media (max-width: 768px) {
     .nav-links { display: none; }
-    .news-grid, .topic-grid { grid-template-columns: 1fr; }
+    .news-scroll { margin: 0 -1rem; padding: 0 1rem 1.25rem; }
+    .topic-grid { grid-template-columns: 1fr; }
     .translator-top { grid-template-columns: 1fr; }
+    .article-split { flex-direction: column; }
+    .article-split-right { width: 100%; height: 45vh; border-left: none; border-top: 1px solid rgba(255,255,255,0.07); }
     .trans-panel.left { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
   }
 `;
@@ -185,9 +208,106 @@ const ROADMAP = [
 ];
 
 const INITIAL_NEWS = [
-  { tag: "Anthropic", title: "Claude 4 ra mắt với khả năng lập luận vượt trội", desc: "Anthropic vừa công bố Claude 4 với context window 1M tokens và cải tiến lớn về reasoning...", meta: "2 giờ trước · Anthropic Blog", source: "anthropic.com", url: "https://anthropic.com/news" },
-  { tag: "OpenAI", title: "GPT-5 đạt điểm benchmark mới trong toán học", desc: "OpenAI chia sẻ kết quả GPT-5 vượt qua các bài kiểm tra toán học nâng cao với độ chính xác 92%...", meta: "4 giờ trước · OpenAI News", source: "openai.com", url: "https://openai.com/blog" },
-  { tag: "Google", title: "Gemini Ultra 2.0 tích hợp sâu vào Google Workspace", desc: "Google thông báo Gemini Ultra 2.0 sẽ có mặt trong Docs, Sheets và Gmail với tính năng AI mới...", meta: "6 giờ trước · Google AI Blog", source: "ai.google", url: "https://ai.google/discover/news" },
+  {
+    type: "hot", tag: "Anthropic", title: "Claude 4 ra mắt với khả năng lập luận vượt trội",
+    desc: "Anthropic vừa công bố Claude 4 với context window 1M tokens và cải tiến đột phá về reasoning — mô hình có thể tự kiểm tra lỗi và sửa câu trả lời theo từng bước.",
+    meta: "2 giờ trước · Anthropic Blog", source: "anthropic.com", url: "https://anthropic.com/news",
+    fullBody: `Anthropic vừa chính thức ra mắt Claude 4, phiên bản mới nhất trong dòng Large Language Model (LLM) của họ, đánh dấu một bước tiến lớn trong lĩnh vực Artificial Intelligence. Điểm nổi bật nhất là context window được mở rộng lên 1 triệu tokens, cho phép mô hình xử lý và phân tích các tài liệu cực dài mà không mất thông tin ngữ cảnh.
+
+Khả năng reasoning (lập luận) của Claude 4 được cải tiến đáng kể nhờ kỹ thuật mới gọi là Extended Thinking. Thay vì trả lời ngay lập tức, mô hình sẽ tự "suy nghĩ" qua nhiều bước, kiểm tra lại logic của mình và tự phát hiện lỗi trước khi đưa ra câu trả lời cuối cùng. Đây là bước tiến quan trọng trong việc giảm thiểu hiện tượng Hallucination — khi AI tự tạo ra thông tin không chính xác.
+
+Về mặt kỹ thuật, Claude 4 sử dụng kiến trúc Transformer cải tiến với cơ chế Attention được tối ưu hóa cho việc xử lý chuỗi dài. Anthropic cũng áp dụng phương pháp Constitutional AI (CAI) — một hệ thống huấn luyện mà mô hình tự đánh giá và điều chỉnh hành vi của mình dựa trên các nguyên tắc an toàn được định sẵn.
+
+Claude 4 có sẵn qua API và ứng dụng Claude.ai. Phiên bản Opus 4 dành cho các tác vụ phức tạp như lập trình, phân tích dữ liệu và nghiên cứu, trong khi Sonnet 4 cân bằng giữa tốc độ và chất lượng cho việc sử dụng hàng ngày. Haiku 4.5 phục vụ các tác vụ cần phản hồi nhanh với chi phí thấp.`,
+    glossary: [
+      { term: "Large Language Model (LLM)", def: "Mô hình ngôn ngữ lớn — hệ thống AI được huấn luyện trên lượng dữ liệu văn bản khổng lồ để hiểu và sinh ngôn ngữ tự nhiên" },
+      { term: "Context Window", def: "Cửa sổ ngữ cảnh — lượng thông tin (đo bằng tokens) mà mô hình có thể xử lý cùng lúc trong một lần hội thoại" },
+      { term: "Reasoning", def: "Khả năng lập luận, suy luận logic của AI để giải quyết vấn đề phức tạp" },
+      { term: "Hallucination", def: "Hiện tượng AI tự tạo ra thông tin sai nhưng trông có vẻ đúng và thuyết phục" },
+      { term: "Constitutional AI (CAI)", def: "Phương pháp huấn luyện AI tự đánh giá và điều chỉnh câu trả lời dựa trên bộ nguyên tắc đạo đức và an toàn" },
+      { term: "Transformer", def: "Kiến trúc mạng nơ-ron sử dụng cơ chế Attention, nền tảng của hầu hết LLM hiện đại" },
+    ],
+  },
+  {
+    type: "wiki", tag: "Wikipedia · Lịch sử AI & Luật", title: "People v. Collins — Khi Xác Suất Đi Vào Phòng Xử Án",
+    desc: "Năm 1968, một vụ án tại California lần đầu dùng lý thuyết xác suất để buộc tội bị cáo. Tòa án Tối cao sau đó bác bỏ vì áp dụng sai thống kê Bayes — bài học kinh điển về giới hạn của toán học trong hệ thống pháp lý.",
+    meta: "Wikipedia · Cập nhật 2024", source: "en.wikipedia.org", url: "https://en.wikipedia.org/wiki/People_v._Collins",
+    fullBody: `Vụ án People v. Collins (1968) là một trong những vụ án nổi tiếng nhất trong lịch sử luật pháp Mỹ liên quan đến việc sử dụng Probability Theory (lý thuyết xác suất) trong tố tụng hình sự. Vụ án xảy ra tại Los Angeles, California, khi một phụ nữ lớn tuổi bị giật túi xách bởi một cặp đôi có đặc điểm nhận dạng cụ thể.
+
+Công tố viên đã mời một giáo sư toán học ra làm chứng, sử dụng phương pháp Product Rule trong Probability để tính xác suất rằng một cặp đôi ngẫu nhiên có tất cả các đặc điểm trùng khớp với mô tả nhân chứng. Ông ấy gán xác suất cho từng đặc điểm riêng lẻ — ví dụ: xe màu vàng (1/10), đàn ông có râu (1/4), phụ nữ tóc vàng (1/3) — rồi nhân tất cả lại để ra con số 1/12.000.000.
+
+Tuy nhiên, Tòa án Tối cao California đã bác bỏ phán quyết. Lý do chính là công tố viên đã vi phạm nguyên tắc Statistical Independence — giả định rằng các đặc điểm hoàn toàn độc lập với nhau, điều này không đúng trong thực tế. Ngoài ra, việc áp dụng Prosecutor's Fallacy — nhầm lẫn giữa xác suất trùng khớp ngẫu nhiên với xác suất vô tội — đã dẫn đến kết luận sai lệch.
+
+Vụ án này trở thành bài học kinh điển trong cả luật pháp và thống kê. Nó cho thấy rằng ngay cả những công cụ toán học mạnh mẽ như Bayesian Statistics cũng có thể bị lạm dụng nếu không hiểu đúng các giả định cơ bản. Ngày nay, vụ án thường được giảng dạy trong các khóa học về Forensic Statistics và AI Ethics để minh họa tầm quan trọng của việc áp dụng đúng phương pháp thống kê.`,
+    glossary: [
+      { term: "Probability Theory", def: "Lý thuyết xác suất — nhánh toán học nghiên cứu các hiện tượng ngẫu nhiên và khả năng xảy ra của sự kiện" },
+      { term: "Product Rule", def: "Quy tắc nhân xác suất — P(A và B) = P(A) × P(B), chỉ đúng khi A và B độc lập" },
+      { term: "Statistical Independence", def: "Tính độc lập thống kê — hai sự kiện không ảnh hưởng đến xác suất xảy ra của nhau" },
+      { term: "Prosecutor's Fallacy", def: "Ngụy biện công tố — nhầm lẫn xác suất bằng chứng khi vô tội với xác suất vô tội khi có bằng chứng" },
+      { term: "Bayesian Statistics", def: "Thống kê Bayes — phương pháp cập nhật niềm tin dựa trên bằng chứng mới, sử dụng công thức Bayes" },
+      { term: "Forensic Statistics", def: "Thống kê pháp y — ứng dụng thống kê vào điều tra và tố tụng hình sự" },
+    ],
+  },
+  {
+    type: "paper", tag: "arXiv · Google Brain · 2017", title: "\"Attention Is All You Need\" — Paper Đổi Lịch Sử NLP",
+    desc: "Vaswani et al. giới thiệu kiến trúc Transformer năm 2017 — loại bỏ hoàn toàn RNN và CNN, chỉ dùng cơ chế Attention. Nền tảng của GPT, BERT và mọi LLM hiện đại.",
+    meta: "Vaswani, Shazeer et al. · Google Brain", source: "arxiv.org", url: "https://arxiv.org/abs/1706.03762",
+    fullBody: `Paper "Attention Is All You Need" được công bố bởi nhóm nghiên cứu tại Google Brain vào năm 2017, do Ashish Vaswani cùng các đồng tác giả thực hiện. Bài báo giới thiệu kiến trúc Transformer — một mô hình hoàn toàn mới loại bỏ hoàn toàn Recurrent Neural Networks (RNNs) và Convolutional Neural Networks (CNNs) trong xử lý ngôn ngữ tự nhiên, chỉ dựa vào cơ chế Self-Attention.
+
+Ý tưởng cốt lõi của Transformer là cơ chế Multi-Head Attention, cho phép mô hình "nhìn" vào tất cả các vị trí trong chuỗi đầu vào cùng một lúc thay vì xử lý tuần tự từng bước như RNN. Điều này giải quyết hai vấn đề lớn: thứ nhất, khả năng Parallelization (xử lý song song) giúp tăng tốc huấn luyện đáng kể; thứ hai, mô hình có thể nắm bắt các Long-Range Dependencies (phụ thuộc tầm xa) tốt hơn nhiều so với RNN vốn bị giới hạn bởi Vanishing Gradient Problem.
+
+Kiến trúc Transformer sử dụng cấu trúc Encoder-Decoder. Encoder mã hóa chuỗi đầu vào thành các biểu diễn vector, trong khi Decoder sinh ra chuỗi đầu ra từng token một. Mỗi lớp trong Encoder và Decoder đều chứa Multi-Head Attention, Feed-Forward Neural Networks, Layer Normalization và Residual Connections. Positional Encoding được thêm vào để mô hình biết được vị trí tương đối của các tokens.
+
+Paper này được trích dẫn hơn 100.000 lần và trở thành nền tảng cho hầu hết mọi mô hình ngôn ngữ lớn hiện đại. BERT (Google, 2018) sử dụng phần Encoder, GPT (OpenAI, 2018) sử dụng phần Decoder, và các mô hình sau này như GPT-4, Claude, LLaMA, Gemini đều dựa trên biến thể của kiến trúc Transformer gốc.`,
+    glossary: [
+      { term: "Self-Attention", def: "Cơ chế cho phép mỗi phần tử trong chuỗi 'chú ý' đến tất cả các phần tử khác để tính toán biểu diễn của mình" },
+      { term: "Multi-Head Attention", def: "Chạy nhiều phép Attention song song với các trọng số khác nhau, giúp mô hình nắm bắt các loại quan hệ khác nhau" },
+      { term: "Encoder-Decoder", def: "Kiến trúc 2 phần: Encoder mã hóa đầu vào, Decoder sinh đầu ra dựa trên mã hóa đó" },
+      { term: "Positional Encoding", def: "Vector được thêm vào embedding để mã hóa thông tin vị trí, vì Attention không có khái niệm thứ tự" },
+      { term: "Vanishing Gradient Problem", def: "Vấn đề gradient biến mất khi lan truyền ngược qua nhiều lớp, khiến RNN khó học các phụ thuộc dài" },
+      { term: "Residual Connections", def: "Kết nối tắt (skip connections) giúp gradient lan truyền dễ dàng qua các lớp sâu" },
+    ],
+  },
+  {
+    type: "social", tag: "Trending · X / Reddit AI", title: "Chain-of-Thought Prompting Đang Viral Trên Cộng Đồng AI",
+    desc: "Kỹ thuật yêu cầu AI 'suy nghĩ từng bước một' trước khi trả lời đang lan rộng sau khi nhiều developer chia sẻ kết quả ấn tượng — tỉ lệ đúng tăng 40% với bài toán toán học phức tạp.",
+    meta: "Trending hôm nay · AI Community", source: "x.com", url: "https://x.com/search?q=chain+of+thought+prompting",
+    fullBody: `Chain-of-Thought (CoT) Prompting là một kỹ thuật Prompt Engineering đang gây sốt trên các nền tảng mạng xã hội như X (Twitter) và Reddit, đặc biệt trong cộng đồng AI/ML. Ý tưởng đơn giản nhưng hiệu quả: thay vì yêu cầu AI trả lời trực tiếp, ta yêu cầu mô hình "suy nghĩ từng bước một" (think step by step) trước khi đưa ra câu trả lời cuối cùng.
+
+Kỹ thuật này được giới thiệu chính thức trong paper "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models" bởi Jason Wei et al. tại Google Brain năm 2022. Nghiên cứu cho thấy rằng chỉ cần thêm các ví dụ có bước giải trung gian vào prompt (Few-Shot CoT), độ chính xác của mô hình trên các bài toán số học tăng từ 17.9% lên 58.1% trên benchmark GSM8K. Đặc biệt, phiên bản Zero-Shot CoT — chỉ cần thêm câu "Let's think step by step" — cũng mang lại cải thiện đáng kể.
+
+Trên Reddit r/MachineLearning và X, nhiều developer chia sẻ các biến thể sáng tạo của CoT. Tree-of-Thoughts (ToT) mở rộng CoT bằng cách cho mô hình khám phá nhiều nhánh suy luận song song. Self-Consistency lấy mẫu nhiều chuỗi suy luận rồi chọn câu trả lời phổ biến nhất (Majority Voting). ReAct kết hợp reasoning với action, cho phép mô hình tương tác với môi trường bên ngoài.
+
+Lý do CoT hiệu quả vẫn đang được nghiên cứu. Giả thuyết phổ biến nhất là kỹ thuật này kích hoạt các Emergent Abilities — khả năng chỉ xuất hiện ở các mô hình đủ lớn (thường trên 100 tỷ Parameters). Khi mô hình "viết ra" các bước trung gian, nó thực chất đang sử dụng các tokens đầu ra như một dạng Working Memory tạm thời, mở rộng khả năng tính toán vượt ra ngoài giới hạn của một lần Forward Pass.`,
+    glossary: [
+      { term: "Prompt Engineering", def: "Kỹ thuật thiết kế câu lệnh (prompt) để khai thác tối đa khả năng của mô hình AI" },
+      { term: "Few-Shot / Zero-Shot", def: "Few-Shot: cho vài ví dụ mẫu. Zero-Shot: không cho ví dụ, chỉ mô tả yêu cầu" },
+      { term: "Tree-of-Thoughts (ToT)", def: "Mở rộng của CoT — mô hình khám phá nhiều nhánh suy luận thay vì chỉ một chuỗi tuyến tính" },
+      { term: "Self-Consistency", def: "Lấy mẫu nhiều chuỗi suy luận khác nhau rồi chọn đáp án xuất hiện nhiều nhất" },
+      { term: "Emergent Abilities", def: "Khả năng mới 'nổi lên' khi mô hình đạt đủ quy mô lớn, không xuất hiện ở mô hình nhỏ" },
+      { term: "Forward Pass", def: "Một lần truyền dữ liệu qua toàn bộ mạng nơ-ron từ đầu vào đến đầu ra" },
+    ],
+  },
+  {
+    type: "hot", tag: "OpenAI", title: "GPT-5 Vượt Ngưỡng 90% Trên Mọi Benchmark Toán Học",
+    desc: "OpenAI công bố GPT-5 đạt 92% độ chính xác trên AMC và AIME — lần đầu tiên một AI vượt qua mức trung bình của thí sinh dự thi toán quốc tế.",
+    meta: "4 giờ trước · OpenAI News", source: "openai.com", url: "https://openai.com/blog",
+    fullBody: `OpenAI vừa công bố kết quả benchmark ấn tượng của GPT-5 trên các bài kiểm tra toán học nâng cao. Mô hình đạt 92% độ chính xác trên AMC (American Mathematics Competition) và AIME (American Invitational Mathematics Examination) — đây là lần đầu tiên một hệ thống AI vượt qua mức trung bình của các thí sinh dự thi toán quốc tế.
+
+Điều đặc biệt là GPT-5 không chỉ giải được các bài toán đơn giản mà còn xử lý tốt các bài yêu cầu Multi-Step Reasoning — suy luận qua nhiều bước liên tiếp. Trên benchmark MATH (bộ 12.500 bài toán từ cấp phổ thông đến đại học), mô hình đạt 89.3%, tăng vọt so với GPT-4 chỉ đạt 52.9%. Trên GSM8K — bộ bài toán cấp tiểu học và trung học — GPT-5 đạt gần như hoàn hảo với 97.8%.
+
+OpenAI cho biết cải tiến đến từ ba yếu tố chính. Thứ nhất là Scale — mô hình được huấn luyện với lượng dữ liệu và tài nguyên tính toán lớn hơn đáng kể. Thứ hai là Process Reward Models (PRM) — hệ thống đánh giá không chỉ đáp án cuối cùng mà còn từng bước giải, giúp mô hình học cách reasoning tốt hơn. Thứ ba là Synthetic Data — dữ liệu toán học được tạo và kiểm chứng tự động bởi các hệ thống Formal Verification.
+
+Tuy nhiên, giới chuyên gia cũng lưu ý rằng benchmark scores không phải tất cả. Mô hình vẫn gặp khó khăn với các bài toán đòi hỏi Mathematical Intuition — khả năng "cảm nhận" hướng giải quyết mà chưa cần chứng minh chặt chẽ. Câu hỏi lớn vẫn còn: liệu AI có thực sự "hiểu" toán học hay chỉ đang Pattern Matching ở mức độ rất cao?`,
+    glossary: [
+      { term: "AMC / AIME", def: "Các kỳ thi toán học quốc gia tại Mỹ — AMC là vòng loại, AIME là vòng nâng cao dành cho top thí sinh" },
+      { term: "Multi-Step Reasoning", def: "Suy luận qua nhiều bước logic liên tiếp để đến đáp án cuối cùng" },
+      { term: "Benchmark", def: "Bộ bài kiểm tra tiêu chuẩn dùng để đo lường và so sánh hiệu suất của các mô hình AI" },
+      { term: "Process Reward Models (PRM)", def: "Mô hình thưởng cho từng bước giải, không chỉ đáp án cuối — giúp AI học reasoning tốt hơn" },
+      { term: "Formal Verification", def: "Phương pháp dùng toán học chặt chẽ để chứng minh tính đúng đắn của một chương trình hoặc lời giải" },
+      { term: "Pattern Matching", def: "Nhận dạng khuôn mẫu — AI nhận ra các mẫu tương tự trong dữ liệu đã học thay vì thực sự 'hiểu'" },
+    ],
+  },
 ];
 
 const INTERVIEW_QS = [
@@ -202,12 +322,14 @@ const INTERVIEW_QS = [
 
 type Task = { id: number; text: string; xp: number; done: boolean };
 type NewsItem = typeof INITIAL_NEWS[0];
-type ArticleData = { title: string; tag: string; meta: string; url: string; body: string; glossary: {term:string;def:string}[]; loading: boolean };
+type ArticleData = { title: string; tag: string; meta: string; url: string; body: string; glossary: {term:string;def:string}[]; loading: boolean; };
 
 export default function PucPortfolio() {
   const navRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const artChatEndRef = useRef<HTMLDivElement>(null);
+  const newsScrollRef = useRef<HTMLDivElement>(null);
 
   const [news, setNews] = useState<NewsItem[]>(INITIAL_NEWS);
   const [newsLoading, setNewsLoading] = useState(false);
@@ -223,6 +345,10 @@ export default function PucPortfolio() {
   const [chatMsgs, setChatMsgs] = useState<{role:string;text:string}[]>([]);
   const [chatInput, setChatInput] = useState("");
   const [chatLoading, setChatLoading] = useState(false);
+  const [artChatMsgs, setArtChatMsgs] = useState<{role:string;text:string}[]>([]);
+  const [artChatInput, setArtChatInput] = useState("");
+  const [artChatLoading, setArtChatLoading] = useState(false);
+  const [preloaded, setPreloaded] = useState<{[k:number]:{body:string;glossary:{term:string;def:string}[]}}>({});
 
   const [tasks, setTasks] = useState<Task[]>(() => {
     try { return JSON.parse(localStorage.getItem("puc_tasks_v2")||"null") || [
@@ -271,6 +397,37 @@ export default function PucPortfolio() {
   }, [tasks, xp]);
 
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior:"smooth" }); }, [chatMsgs]);
+  useEffect(() => { artChatEndRef.current?.scrollIntoView({ behavior:"smooth" }); }, [artChatMsgs]);
+
+  // Auto-scroll news carousel — pause when a card is expanded or on hover
+  useEffect(() => {
+    const el = newsScrollRef.current;
+    if (!el || expandedNews !== null) return;
+    let animId: number;
+    let paused = false;
+    const pause = () => { paused = true; };
+    const resume = () => { paused = false; };
+    const step = () => {
+      if (!paused) {
+        if (el.scrollLeft >= el.scrollWidth - el.clientWidth - 1) {
+          el.scrollLeft = 0;
+        } else {
+          el.scrollLeft += 0.6;
+        }
+      }
+      animId = requestAnimationFrame(step);
+    };
+    animId = requestAnimationFrame(step);
+    el.addEventListener("mouseenter", pause);
+    el.addEventListener("mouseleave", resume);
+    el.addEventListener("touchstart", pause, { passive: true });
+    return () => {
+      cancelAnimationFrame(animId);
+      el.removeEventListener("mouseenter", pause);
+      el.removeEventListener("mouseleave", resume);
+      el.removeEventListener("touchstart", pause);
+    };
+  }, [expandedNews]);
 
   // Lock body scroll when article open
   useEffect(() => {
@@ -280,12 +437,188 @@ export default function PucPortfolio() {
 
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior:"smooth" });
 
-  const callClaude = async (prompt: string, system = "") => {
+  // --- DAILY NEWS SYSTEM ---
+  const AI_KEYWORDS = /\b(ai|artificial intelligence|machine learning|deep learning|neural|llm|gpt|claude|gemini|transformer|openai|anthropic|diffusion|nlp|computer vision|reinforcement learning|rlhf|fine.?tun|langchain|rag|vector|embedding)\b/i;
+
+  const WIKI_AI_TOPICS = [
+    "Artificial_neural_network", "Backpropagation", "Turing_test", "ELIZA", "Perceptron",
+    "Convolutional_neural_network", "Recurrent_neural_network", "Generative_adversarial_network",
+    "Natural_language_processing", "Computer_vision", "Reinforcement_learning", "Expert_system",
+    "Bayesian_network", "Support_vector_machine", "Random_forest", "Gradient_descent",
+    "Overfitting", "Vanishing_gradient_problem", "Word2vec", "BERT_(language_model)",
+    "ImageNet", "AlphaGo", "GPT-3", "Stable_Diffusion", "DALL-E", "ChatGPT",
+    "AI_alignment", "Existential_risk_from_artificial_general_intelligence",
+    "Chinese_room", "Moravec%27s_paradox", "Frame_problem", "Symbol_grounding_problem",
+    "Explainable_artificial_intelligence", "Federated_learning", "Transfer_learning",
+  ];
+
+  const fetchHNStories = async (): Promise<{title:string;url:string;source:string}[]> => {
+    try {
+      const idsRes = await fetch("https://hacker-news.firebaseio.com/v0/topstories.json");
+      const ids: number[] = await idsRes.json();
+      const stories = await Promise.all(
+        ids.slice(0, 40).map(id =>
+          fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(r => r.json())
+        )
+      );
+      return stories
+        .filter((s: any) => s?.title && AI_KEYWORDS.test(s.title))
+        .slice(0, 2)
+        .map((s: any) => ({ title: s.title, url: s.url || `https://news.ycombinator.com/item?id=${s.id}`, source: "news.ycombinator.com" }));
+    } catch { return []; }
+  };
+
+  const fetchRedditAI = async (): Promise<{title:string;url:string;source:string;score:number}[]> => {
+    try {
+      const res = await fetch("https://www.reddit.com/r/MachineLearning/hot.json?limit=20");
+      const data = await res.json();
+      return (data?.data?.children || [])
+        .map((c: any) => c.data)
+        .filter((p: any) => p && !p.stickied && p.score > 50)
+        .slice(0, 2)
+        .map((p: any) => ({ title: p.title, url: `https://reddit.com${p.permalink}`, source: "reddit.com/r/MachineLearning", score: p.score }));
+    } catch { return []; }
+  };
+
+  const fetchWikiAI = async (): Promise<{title:string;extract:string;url:string}|null> => {
+    try {
+      const topic = WIKI_AI_TOPICS[Math.floor(Math.random() * WIKI_AI_TOPICS.length)];
+      const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${topic}`);
+      const data = await res.json();
+      return { title: data.title, extract: data.extract || "", url: data.content_urls?.desktop?.page || `https://en.wikipedia.org/wiki/${topic}` };
+    } catch { return null; }
+  };
+
+  const generateDailyNews = async () => {
+    setNewsLoading(true);
+    try {
+      const [hn, reddit, wiki] = await Promise.all([fetchHNStories(), fetchRedditAI(), fetchWikiAI()]);
+
+      // Build raw items from fetched data
+      const rawItems: { type: string; tag: string; title: string; desc: string; source: string; url: string }[] = [];
+
+      hn.forEach(s => rawItems.push({ type: "hot", tag: "Hacker News", title: s.title, desc: s.title, source: s.source, url: s.url }));
+      reddit.forEach(p => rawItems.push({ type: "social", tag: "Reddit · r/MachineLearning", title: p.title, desc: p.title, source: p.source, url: p.url }));
+      if (wiki) rawItems.push({ type: "wiki", tag: `Wikipedia · ${wiki.title}`, title: wiki.title, desc: wiki.extract.slice(0, 200), source: "en.wikipedia.org", url: wiki.url });
+
+      // If we got less than 3 items, keep some from INITIAL_NEWS as filler
+      while (rawItems.length < 5 && rawItems.length < INITIAL_NEWS.length) {
+        rawItems.push(INITIAL_NEWS[rawItems.length]);
+      }
+
+      // Now translate + generate full articles via Claude (parallel, Haiku for speed)
+      const translated = await Promise.all(rawItems.slice(0, 5).map(async (item) => {
+        if ((item as any).fullBody) return item as NewsItem; // Already has full content (from INITIAL_NEWS fallback)
+        try {
+          const raw = await callClaude(
+            `Dịch và viết bài tiếng Việt chi tiết về chủ đề AI sau (4-5 đoạn, giữ nguyên thuật ngữ tiếng Anh):
+Tiêu đề gốc: "${item.title}"
+Mô tả: "${item.desc}"
+Nguồn: ${item.source}
+Format JSON: {"title":"Tiêu đề tiếng Việt hấp dẫn","desc":"2-3 câu mô tả tiếng Việt","fullBody":"nội dung bài đọc đầy đủ tiếng Việt với đoạn cách nhau bằng \\n\\n","glossary":[{"term":"Thuật ngữ EN","def":"Giải thích TV"}]}
+Chỉ JSON.`,
+            "Biên tập viên tech Việt Nam. Chỉ trả JSON thuần túy.",
+            true
+          );
+          const parsed = JSON.parse(raw.replace(/```json|```/g,"").trim());
+          return {
+            ...item,
+            title: parsed.title || item.title,
+            desc: parsed.desc || item.desc,
+            meta: new Date().toLocaleDateString("vi-VN") + " · " + item.source,
+            fullBody: parsed.fullBody || item.desc,
+            glossary: parsed.glossary || [],
+          } as NewsItem;
+        } catch {
+          return { ...item, meta: new Date().toLocaleDateString("vi-VN") + " · " + item.source, fullBody: item.desc, glossary: [] } as NewsItem;
+        }
+      }));
+
+      setNews(translated);
+      setPreloaded({});
+
+      // Cache to localStorage
+      localStorage.setItem("puc_news_date", new Date().toDateString());
+      localStorage.setItem("puc_news_data", JSON.stringify(translated));
+    } catch {
+      // Keep INITIAL_NEWS on failure
+    }
+    setNewsLoading(false);
+  };
+
+  // On mount: check cache or fetch new daily news + set midnight timer
+  useEffect(() => {
+    const cachedDate = localStorage.getItem("puc_news_date");
+    const today = new Date().toDateString();
+
+    if (cachedDate === today) {
+      try {
+        const cached = JSON.parse(localStorage.getItem("puc_news_data") || "null");
+        if (cached?.length) { setNews(cached); return; }
+      } catch {}
+    }
+    // Fetch new news (only if API key is configured)
+    if (ANTHROPIC_KEY) generateDailyNews();
+  }, []);
+
+  // Midnight auto-refresh timer
+  useEffect(() => {
+    const now = new Date();
+    const midnight = new Date(now);
+    midnight.setDate(midnight.getDate() + 1);
+    midnight.setHours(0, 0, 0, 0);
+    const msUntilMidnight = midnight.getTime() - now.getTime();
+
+    const timer = setTimeout(() => {
+      if (ANTHROPIC_KEY) generateDailyNews();
+    }, msUntilMidnight);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Pre-generate all articles in background when news loads
+  const preloadArticles = (items: NewsItem[]) => {
+    setPreloaded({});
+    items.forEach((n, i) => {
+      callClaude(
+        `Viết bài đọc chi tiết về chủ đề sau bằng tiếng Việt (4-6 đoạn, mỗi đoạn 3-4 câu).
+Chủ đề: "${n.title}. ${n.desc}"
+Yêu cầu:
+- Giữ nguyên tất cả thuật ngữ tiếng Anh (như Neural Network, Fine-tuning, Benchmark, v.v.)
+- KHÔNG phân tích, KHÔNG nhận xét cá nhân — chỉ trình bày thông tin
+- Cuối bài thêm phần GLOSSARY liệt kê các thuật ngữ tiếng Anh với giải thích tiếng Việt
+Format JSON: {"body":"nội dung bài đọc với các đoạn cách nhau bằng \\n\\n","glossary":[{"term":"Tên thuật ngữ","def":"Giải thích tiếng Việt"}]}
+Chỉ JSON.`,
+        "Bạn là biên tập viên tech. Chỉ trả JSON thuần túy.",
+        true
+      ).then(raw => {
+        try {
+          const parsed = JSON.parse(raw.replace(/```json|```/g,"").trim());
+          setPreloaded(prev => ({ ...prev, [i]: { body: parsed.body||"", glossary: parsed.glossary||[] } }));
+        } catch {
+          setPreloaded(prev => ({ ...prev, [i]: { body: raw, glossary: [] } }));
+        }
+      });
+    });
+  };
+
+  // Note: preloadArticles is called by generateDailyNews and refreshNews
+
+  const ANTHROPIC_KEY = import.meta.env.VITE_ANTHROPIC_KEY || "";
+
+  const callClaude = async (prompt: string, system = "", fast = false) => {
+    if (!ANTHROPIC_KEY) return "API key chưa được cấu hình.";
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": ANTHROPIC_KEY,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true",
+      },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514", max_tokens: 1500,
+        model: fast ? "claude-haiku-4-5-20251001" : "claude-sonnet-4-20250514",
+        max_tokens: fast ? 800 : 1500,
         system: system || "Bạn là trợ lý AI chuyên về công nghệ. Trả lời bằng tiếng Việt, ngắn gọn, dễ hiểu.",
         messages: [{ role:"user", content:prompt }],
       }),
@@ -301,41 +634,58 @@ export default function PucPortfolio() {
     setNewsDetail(p => ({ ...p, [idx]:"loading" }));
     const text = await callClaude(
       `Phân tích ngắn 3-4 câu về tin AI này, tập trung ý nghĩa thực tế: "${news[idx].title}. ${news[idx].desc}"`,
-      "Chuyên gia AI. Phân tích súc tích bằng tiếng Việt."
+      "Chuyên gia AI. Phân tích súc tích bằng tiếng Việt.",
+      true
     );
     setNewsDetail(p => ({ ...p, [idx]:text }));
   };
 
-  const openArticle = async (idx: number) => {
+  const openArticle = (idx: number) => {
     const n = news[idx];
-    setArticle({ title:n.title, tag:n.tag, meta:n.meta, url:n.url, body:"", glossary:[], loading:true });
-    const raw = await callClaude(
-      `Viết bài đọc chi tiết về chủ đề sau bằng tiếng Việt (4-6 đoạn, mỗi đoạn 3-4 câu). 
-Chủ đề: "${n.title}. ${n.desc}"
-Yêu cầu:
-- Giữ nguyên tất cả thuật ngữ tiếng Anh (như Neural Network, Fine-tuning, Benchmark, v.v.)
-- KHÔNG phân tích, KHÔNG nhận xét cá nhân — chỉ trình bày thông tin
-- Cuối bài thêm phần GLOSSARY liệt kê các thuật ngữ tiếng Anh với giải thích tiếng Việt
-Format JSON: {"body":"nội dung bài đọc với các đoạn cách nhau bằng \\n\\n","glossary":[{"term":"Tên thuật ngữ","def":"Giải thích tiếng Việt"}]}
-Chỉ JSON.`,
-      "Bạn là biên tập viên tech. Chỉ trả JSON thuần túy."
-    );
-    try {
-      const parsed = JSON.parse(raw.replace(/```json|```/g,"").trim());
-      setArticle({ title:n.title, tag:n.tag, meta:n.meta, url:n.url, body:parsed.body||"", glossary:parsed.glossary||[], loading:false });
-    } catch {
-      setArticle({ title:n.title, tag:n.tag, meta:n.meta, url:n.url, body:raw, glossary:[], loading:false });
-    }
+    setArtChatMsgs([]);
+    setArtChatInput("");
+    setExpandedNews(null);
+    const pre = preloaded[idx];
+    setArticle({
+      title: n.title, tag: n.tag, meta: n.meta, url: n.url,
+      body: pre?.body || n.fullBody || n.desc,
+      glossary: pre?.glossary || n.glossary || [],
+      loading: false,
+    });
   };
 
   const refreshNews = async () => {
     setNewsLoading(true);
     const text = await callClaude(
-      `Tạo 3 tin tức AI mới nhất hôm nay. JSON: [{"tag":"Công ty","title":"Tiêu đề TV","desc":"2 câu TV","meta":"X giờ trước · Nguồn","source":"domain.com","url":"https://..."}]. Chỉ JSON.`,
-      "Chỉ JSON thuần túy."
+      `Tạo 5 bài tin đa dạng về AI bao gồm: 2 tin tức hot mới nhất, 1 bài Wikipedia về khái niệm/sự kiện AI thú vị, 1 tóm tắt paper khoa học AI nổi tiếng, 1 xu hướng mạng xã hội AI. Mỗi bài viết bằng tiếng Việt, desc 2-3 câu sinh động.
+JSON: [{"type":"hot|wiki|paper|social","tag":"Nguồn/Chủ đề","title":"Tiêu đề TV","desc":"2-3 câu TV sinh động","meta":"X giờ trước · Nguồn","source":"domain.com","url":"https://..."}]. Chỉ JSON thuần túy.`,
+      "Chỉ JSON thuần túy, không markdown.",
+      true
     );
-    try { setNews(JSON.parse(text.replace(/```json|```/g,"").trim())); setNewsDetail({}); setExpandedNews(null); } catch {}
+    try {
+      const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
+      setNews(parsed);
+      setNewsDetail({});
+      setExpandedNews(null);
+      preloadArticles(parsed);
+    } catch {}
     setNewsLoading(false);
+  };
+
+  const sendArtChat = async () => {
+    if (!artChatInput.trim() || !article) return;
+    const msg = artChatInput; setArtChatInput("");
+    setArtChatMsgs(p => [...p, { role:"user", text:msg }]);
+    setArtChatLoading(true);
+    const ctx = article.body
+      ? `Tiêu đề bài: ${article.title}\nNội dung tóm tắt: ${article.body.slice(0,1200)}\n\n`
+      : `Bài đang xem: ${article.title}\n\n`;
+    const text = await callClaude(
+      `${ctx}Câu hỏi của người đọc: ${msg}`,
+      "Bạn là chuyên gia AI đang hỗ trợ người đọc hiểu bài viết. Trả lời bằng tiếng Việt, ngắn gọn và rõ ràng. Giữ nguyên thuật ngữ tiếng Anh kỹ thuật."
+    );
+    setArtChatMsgs(p => [...p, { role:"ai", text }]);
+    setArtChatLoading(false);
   };
 
   const translateDoc = async () => {
@@ -396,48 +746,84 @@ Chỉ JSON.`,
             <button className="article-back-btn" onClick={() => setArticle(null)}>← Quay lại</button>
             <span style={{fontSize:"0.8rem",color:"var(--muted)"}}>{article.tag} · {article.meta}</span>
           </div>
-          <div className="article-inner">
-            <span className="article-tag">{article.tag}</span>
-            <div className="article-title">{article.title}</div>
-            <div className="article-meta">
-              <span>{article.meta}</span>
-              <a href={article.url} target="_blank" rel="noreferrer" className="article-source-link">↗ Xem bài gốc</a>
-            </div>
-
-            {/* Placeholder image */}
-            <div className="article-img">
-              {article.loading
-                ? <span className="article-img-loading"><span className="loading-dots">Đang tạo nội dung</span></span>
-                : <div style={{width:"100%",height:"100%",background:`linear-gradient(135deg, hsl(${article.tag.length*30},40%,15%), hsl(${article.tag.length*50},30%,10%))`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"4rem"}}>
-                    {article.tag==="Anthropic"?"🤖":article.tag==="OpenAI"?"⚡":article.tag==="Google"?"🔍":"🧠"}
-                  </div>
-              }
-            </div>
-
-            {article.loading
-              ? <div style={{textAlign:"center",padding:"3rem",color:"var(--muted)"}}>
-                  <span className="loading-dots">Claude đang dịch & biên tập bài viết</span>
+          <div className="article-split">
+            {/* LEFT — Article content */}
+            <div className="article-split-left">
+              <div className="article-inner">
+                <span className="article-tag">{article.tag}</span>
+                <div className="article-title">{article.title}</div>
+                <div className="article-meta">
+                  <span>{article.meta}</span>
+                  <a href={article.url} target="_blank" rel="noreferrer" className="article-source-link">↗ Xem bài gốc</a>
                 </div>
-              : <>
-                  <div className="article-body">
-                    {article.body.split("\n\n").map((p, i) => <p key={i}>{p}</p>)}
-                  </div>
-                  {article.glossary.length > 0 && (
-                    <div className="article-glossary">
-                      <div className="article-glossary-title">📖 Glossary — Thuật ngữ kỹ thuật</div>
-                      {article.glossary.map((g, i) => (
-                        <div key={i} className="glossary-item">
-                          <div className="glossary-term">{g.term}</div>
-                          <div className="glossary-def">{g.def}</div>
-                        </div>
-                      ))}
+
+                {article.loading
+                  ? <div style={{textAlign:"center",padding:"3rem",color:"var(--muted)"}}>
+                      <span className="loading-dots">Claude đang dịch & biên tập bài viết</span>
                     </div>
-                  )}
-                  <a href={article.url} target="_blank" rel="noreferrer" className="article-source-link" style={{marginTop:"2.5rem",display:"inline-flex"}}>
-                    ↗ Đọc bài gốc tại {article.url.replace("https://","")}
-                  </a>
-                </>
-            }
+                  : <>
+                      <div className="article-body">
+                        {article.body.split("\n\n").map((p, i) => <p key={i}>{p}</p>)}
+                      </div>
+                      {article.glossary.length > 0 && (
+                        <div className="article-glossary">
+                          <div className="article-glossary-title">📖 Glossary — Thuật ngữ kỹ thuật</div>
+                          {article.glossary.map((g, i) => (
+                            <div key={i} className="glossary-item">
+                              <div className="glossary-term">{g.term}</div>
+                              <div className="glossary-def">{g.def}</div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      <a href={article.url} target="_blank" rel="noreferrer" className="article-source-link" style={{marginTop:"2.5rem",display:"inline-flex"}}>
+                        ↗ Đọc bài gốc tại {article.url.replace("https://","")}
+                      </a>
+                    </>
+                }
+              </div>
+            </div>
+
+            {/* RIGHT — AI Chat panel */}
+            <div className="article-split-right">
+              <div className="art-chat-header">
+                💬 Thảo luận với AI về bài viết này
+              </div>
+              <div className="art-chat-msgs">
+                {artChatMsgs.length === 0 && (
+                  <div style={{fontSize:"0.8rem",color:"var(--muted)",textAlign:"center",padding:"1.5rem 1rem",lineHeight:1.7}}>
+                    {article.loading
+                      ? "Đợi bài tải xong để bắt đầu thảo luận..."
+                      : "Hỏi bất kỳ điều gì về bài viết — thuật ngữ, khái niệm, ứng dụng thực tế..."}
+                  </div>
+                )}
+                {artChatMsgs.map((m,i) => (
+                  <div key={i} className={`art-chat-msg ${m.role}`}>{m.text}</div>
+                ))}
+                {artChatLoading && (
+                  <div className="art-chat-msg ai"><span className="loading-dots">AI đang trả lời</span></div>
+                )}
+                <div ref={artChatEndRef} />
+              </div>
+              <div className="art-chat-input-row">
+                <input
+                  className="art-chat-input"
+                  placeholder="Hỏi về bài viết..."
+                  value={artChatInput}
+                  onChange={e => setArtChatInput(e.target.value)}
+                  onKeyDown={e => e.key==="Enter" && !artChatLoading && sendArtChat()}
+                  disabled={article.loading}
+                />
+                <button
+                  className="ai-btn"
+                  style={{padding:"0.45rem 0.85rem",fontSize:"0.78rem"}}
+                  onClick={sendArtChat}
+                  disabled={artChatLoading || !artChatInput.trim() || article.loading}
+                >
+                  Gửi
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -481,39 +867,36 @@ Chỉ JSON.`,
       <div className="section-wrap dark" id="news">
         <div className="section">
           <div className="section-label">🗞 AI NEWS HÔM NAY</div>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:"2.5rem",flexWrap:"wrap",gap:"1rem"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:"2rem",flexWrap:"wrap",gap:"1rem"}}>
             <div>
               <div className="section-title">Tin AI mới nhất</div>
-              <div className="section-sub">Cập nhật & phân tích bởi Claude AI</div>
+              <div className="section-sub">Tin hot · Wikipedia AI · Research Papers · Mạng xã hội — Dịch & phân tích bởi Claude</div>
             </div>
             <button className="ai-btn" onClick={refreshNews} disabled={newsLoading}>
-              {newsLoading ? <span className="loading-dots">Đang tải</span> : "Refresh tin mới"}
+              {newsLoading ? <span className="loading-dots">Đang tải</span> : "↻ Refresh tin mới"}
             </button>
           </div>
-          <div className="news-grid">
-            {news.map((n, i) => (
-              <div key={i} className={`news-card${expandedNews===i?" expanded":""}`} onClick={() => fetchNewsDetail(i)}>
-                <span className="news-tag">{n.tag}</span>
-                <div className="news-title">{n.title}</div>
-                <div className="news-desc">{n.desc}</div>
-                <div className="news-meta">{n.meta}</div>
-                <a href={n.url} target="_blank" rel="noreferrer" className="news-source-link" onClick={e => e.stopPropagation()}>
-                  ↗ {n.source}
-                </a>
-                {expandedNews === i && (
-                  <div className="news-expand" onClick={e => e.stopPropagation()}>
-                    <div className="news-analysis">
-                      {newsDetail[i] === "loading"
-                        ? <span className="loading-dots">Claude đang phân tích</span>
-                        : newsDetail[i]}
-                    </div>
-                    <button className="read-more-btn" onClick={() => openArticle(i)}>
-                      📖 Đọc thêm — Bài dịch đầy đủ
-                    </button>
+          <div className="news-scroll" ref={newsScrollRef}>
+            <div className="news-scroll-inner">
+              {news.map((n, i) => (
+                <div key={i} className="news-card" onClick={() => openArticle(i)}>
+                  <div style={{display:"flex",gap:"0.4rem",flexWrap:"wrap",marginBottom:"0.75rem"}}>
+                    {n.type && (
+                      <span className={`news-type-badge news-type-${n.type}`}>
+                        {n.type==="wiki"?"📚 Wiki":n.type==="paper"?"🔬 Research":n.type==="hot"?"🔥 Hot":"📱 Social"}
+                      </span>
+                    )}
+                    <span className="news-tag" style={{marginBottom:0}}>{n.tag}</span>
                   </div>
-                )}
-              </div>
-            ))}
+                  <div className="news-title">{n.title}</div>
+                  <div className="news-desc">{n.desc}</div>
+                  <div className="news-meta">{n.meta}</div>
+                  <a href={n.url} target="_blank" rel="noreferrer" className="news-source-link" onClick={e => e.stopPropagation()}>
+                    ↗ {n.source}
+                  </a>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
