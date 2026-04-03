@@ -105,14 +105,44 @@ const globalStyles = `
   .article-source-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--accent); font-size: 0.85rem; text-decoration: none; margin-top: 2rem; }
   .article-source-link:hover { text-decoration: underline; }
 
-  .translator-box { border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; background: rgba(255,255,255,0.03); overflow: hidden; }
-  .translator-top { display: grid; grid-template-columns: 1fr 1fr; }
-  .trans-panel { padding: 1.5rem; }
-  .trans-panel.left { border-right: 1px solid rgba(255,255,255,0.08); }
-  .trans-label-sm { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
-  .trans-textarea { width: 100%; background: transparent; border: none; outline: none; color: var(--fg); font-family: var(--font-body); font-size: 0.88rem; line-height: 1.7; resize: none; min-height: 180px; }
-  .trans-textarea::placeholder { color: rgba(255,255,255,0.2); }
-  .translator-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+  /* VOICE BOT */
+  .vbot-wrap { display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap; }
+  .vbot-left { flex: 1; min-width: 280px; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; padding: 2.5rem 1.5rem; border: 1px solid rgba(255,255,255,0.07); border-radius: 24px; background: rgba(255,255,255,0.02); }
+  .vbot-orb { position: relative; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .vbot-orb-inner { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg,#6366f1,#a78bfa); display: flex; align-items: center; justify-content: center; font-size: 2rem; transition: transform 0.2s; box-shadow: 0 0 30px rgba(99,102,241,0.3); z-index: 1; position: relative; }
+  .vbot-orb:hover .vbot-orb-inner { transform: scale(1.08); }
+  .vbot-ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(99,102,241,0.4); animation: none; }
+  .vbot-ring.listening { animation: vbotPulse 1s ease-in-out infinite; }
+  .vbot-ring.speaking { animation: vbotSpeak 0.6s ease-in-out infinite alternate; }
+  @keyframes vbotPulse { 0%,100%{transform:scale(1);opacity:0.6} 50%{transform:scale(1.25);opacity:0.15} }
+  @keyframes vbotSpeak { from{transform:scale(1.05);opacity:0.5} to{transform:scale(1.3);opacity:0.1} }
+  .vbot-ring2 { position: absolute; inset: -10px; border-radius: 50%; border: 1.5px solid rgba(167,139,250,0.2); }
+  .vbot-ring2.listening { animation: vbotPulse 1s ease-in-out infinite 0.2s; }
+  .vbot-ring2.speaking { animation: vbotSpeak 0.6s ease-in-out infinite alternate 0.15s; }
+  .vbot-status-text { font-size: 0.82rem; color: var(--muted); text-align: center; min-height: 1.2em; }
+  .vbot-status-text.active { color: #a78bfa; }
+  .vbot-mic-btn { padding: 0.65rem 2rem; border-radius: 999px; border: 1.5px solid rgba(99,102,241,0.5); background: rgba(99,102,241,0.12); color: #a78bfa; font-family: var(--font-body); font-size: 0.85rem; cursor: pointer; transition: all 0.2s; font-weight: 500; }
+  .vbot-mic-btn:hover { background: rgba(99,102,241,0.25); }
+  .vbot-mic-btn.listening { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.5); color: #f87171; animation: vbotBlink 1s ease-in-out infinite; }
+  @keyframes vbotBlink { 0%,100%{opacity:1} 50%{opacity:0.6} }
+  .vbot-mic-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .vbot-modes-row { display: flex; gap: 0.4rem; flex-wrap: wrap; justify-content: center; }
+  .vbot-mode-chip { font-size: 0.65rem; padding: 0.2rem 0.6rem; border-radius: 999px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: var(--muted); cursor: pointer; font-family: var(--font-body); transition: all 0.15s; }
+  .vbot-mode-chip.active { background: rgba(99,102,241,0.2); border-color: rgba(99,102,241,0.5); color: #a78bfa; }
+  .vbot-right { flex: 2; min-width: 300px; display: flex; flex-direction: column; gap: 0; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden; height: 480px; background: rgba(255,255,255,0.01); }
+  .vbot-transcript { flex: 1; overflow-y: auto; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; }
+  .vbot-turn { display: flex; flex-direction: column; gap: 0.2rem; }
+  .vbot-turn.user { align-items: flex-end; }
+  .vbot-turn.ai { align-items: flex-start; }
+  .vbot-bubble { padding: 0.65rem 1rem; border-radius: 14px; font-size: 0.84rem; line-height: 1.7; max-width: 85%; }
+  .vbot-bubble.user { background: rgba(99,102,241,0.2); color: var(--fg); border-bottom-right-radius: 3px; }
+  .vbot-bubble.ai { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.9); border-bottom-left-radius: 3px; }
+  .vbot-correction { font-size: 0.72rem; color: #fbbf24; padding: 0.3rem 0.65rem; background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.15); border-radius: 6px; max-width: 85%; align-self: flex-end; }
+  .vbot-input-row { border-top: 1px solid rgba(255,255,255,0.07); padding: 0.75rem 1rem; display: flex; gap: 0.6rem; flex-shrink: 0; }
+  .vbot-text-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 0.55rem 0.9rem; color: var(--fg); font-family: var(--font-body); font-size: 0.83rem; outline: none; }
+  .vbot-text-input::placeholder { color: rgba(255,255,255,0.2); }
+  .vbot-send-btn { background: linear-gradient(135deg,#6366f1,#a78bfa); border: none; border-radius: 8px; padding: 0 0.9rem; color: white; font-size: 0.9rem; cursor: pointer; flex-shrink: 0; }
+  .vbot-send-btn:disabled { opacity: 0.35; cursor: not-allowed; }
   .chat-area { padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08); max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; }
   .chat-msg { padding: 0.75rem 1rem; border-radius: 10px; font-size: 0.85rem; line-height: 1.7; max-width: 85%; }
   .chat-msg.user { background: rgba(168,230,207,0.12); color: var(--fg); align-self: flex-end; }
@@ -133,6 +163,7 @@ const globalStyles = `
   .today-box { background: rgba(168,230,207,0.06); border: 1px solid rgba(168,230,207,0.2); border-radius: 14px; padding: 1.5rem; margin-bottom: 2rem; }
   .today-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
   .today-title { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+  @media (max-width: 768px) { .gm-stats { grid-template-columns: auto 1fr auto; gap: 1rem; } .skill-node { width: 140px; } .achiev-grid { grid-template-columns: repeat(2,1fr); } }
   .task-list { display: flex; flex-direction: column; gap: 0.6rem; }
   .task-item { display: flex; align-items: center; gap: 0.9rem; padding: 0.75rem 1rem; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); }
   .task-item.done { opacity: 0.5; }
@@ -146,6 +177,51 @@ const globalStyles = `
   .task-delete:hover { color: #f87171; }
   .add-task-btn { display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.04); border: 1px dashed rgba(255,255,255,0.15); border-radius: 10px; padding: 0.65rem 1rem; color: var(--muted); font-size: 0.82rem; cursor: pointer; font-family: var(--font-body); width: 100%; margin-top: 0.5rem; transition: background 0.2s; }
   .add-task-btn:hover { background: rgba(255,255,255,0.08); }
+  .gm-stats { display: grid; grid-template-columns: auto 1fr auto; gap: 1.5rem; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 1.25rem 1.5rem; margin-bottom: 2rem; }
+  .rank-badge { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; min-width: 64px; }
+  .rank-icon { font-size: 2rem; line-height: 1; }
+  .rank-name { font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; }
+  .level-info { display: flex; flex-direction: column; gap: 0.6rem; }
+  .level-row { display: flex; align-items: center; gap: 0.75rem; }
+  .level-title { font-size: 0.82rem; font-weight: 500; white-space: nowrap; }
+  .xp-bar-lg { flex: 1; height: 8px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }
+  .xp-fill-lg { height: 100%; border-radius: 999px; transition: width 0.6s ease; }
+  .xp-caption { font-size: 0.7rem; color: var(--muted); }
+  .gm-right { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; min-width: 56px; }
+  .streak-num { font-size: 1.6rem; font-weight: 700; color: #f97316; line-height: 1; }
+  .streak-lbl { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .gm-tabs { display: flex; gap: 0.3rem; margin-bottom: 1.75rem; background: rgba(255,255,255,0.04); border-radius: 12px; padding: 0.3rem; }
+  .gm-tab { flex: 1; padding: 0.5rem 0.3rem; border-radius: 8px; border: none; font-family: var(--font-body); font-size: 0.78rem; cursor: pointer; color: var(--muted); background: transparent; transition: all 0.2s; }
+  .gm-tab.active { background: rgba(255,255,255,0.1); color: var(--fg); font-weight: 500; }
+  .quest-grid { display: flex; flex-direction: column; gap: 0.75rem; }
+  .quest-card { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); cursor: pointer; transition: all 0.2s; user-select: none; }
+  .quest-card:hover:not(.done) { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.14); }
+  .quest-card.done { opacity: 0.55; border-color: rgba(168,230,207,0.2); background: rgba(168,230,207,0.04); cursor: default; }
+  .quest-icon { font-size: 1.3rem; width: 32px; text-align: center; flex-shrink: 0; }
+  .quest-text { flex: 1; font-size: 0.88rem; line-height: 1.4; }
+  .quest-xp { font-size: 0.78rem; color: var(--accent); font-weight: 600; white-space: nowrap; }
+  .quest-done-check { font-size: 1rem; color: var(--accent); }
+  .skill-tree-wrap { display: flex; flex-direction: column; gap: 2rem; }
+  .tier-section { }
+  .tier-label { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .tier-nodes { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .skill-node { border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1rem 1.1rem; background: rgba(255,255,255,0.03); width: 180px; flex-shrink: 0; transition: all 0.25s; }
+  .skill-node.unlocked { border-color: rgba(168,230,207,0.4); background: rgba(168,230,207,0.06); }
+  .skill-node.locked { opacity: 0.38; filter: grayscale(0.5); }
+  .sn-icon { font-size: 1.4rem; margin-bottom: 0.35rem; }
+  .sn-name { font-size: 0.84rem; font-weight: 500; margin-bottom: 0.2rem; }
+  .sn-desc { font-size: 0.71rem; color: var(--muted); line-height: 1.45; margin-bottom: 0.5rem; }
+  .sn-req { font-size: 0.67rem; color: #fbbf24; }
+  .sn-badge { font-size: 0.67rem; color: var(--accent); font-weight: 500; }
+  .achiev-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.85rem; }
+  .achiev-card { border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1.1rem 1rem; background: rgba(255,255,255,0.03); display: flex; flex-direction: column; align-items: center; gap: 0.4rem; text-align: center; transition: all 0.2s; }
+  .achiev-card.unlocked { border-color: rgba(168,230,207,0.25); box-shadow: 0 0 12px rgba(168,230,207,0.08); }
+  .achiev-card.locked { opacity: 0.3; filter: grayscale(1); }
+  .ach-icon { font-size: 1.75rem; }
+  .ach-name { font-size: 0.78rem; font-weight: 500; }
+  .ach-desc { font-size: 0.67rem; color: var(--muted); line-height: 1.4; }
+  @keyframes xpPop { 0%{opacity:0;transform:translateY(4px) scale(0.9)} 15%{opacity:1;transform:translateY(0) scale(1.1)} 80%{opacity:1} 100%{opacity:0;transform:translateY(-24px)} }
+  .xp-popup { position:fixed; pointer-events:none; z-index:9999; font-size:1rem; font-weight:700; color:#a8e6cf; text-shadow: 0 0 8px rgba(168,230,207,0.6); animation: xpPop 1.4s ease forwards; }
   .topic-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
   .topic-card { border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1.25rem; background: rgba(255,255,255,0.03); }
   .topic-card.active-topic { border-color: rgba(168,230,207,0.4); background: rgba(168,230,207,0.05); }
@@ -170,6 +246,10 @@ const globalStyles = `
   .feedback-box { background: rgba(168,230,207,0.06); border: 1px solid rgba(168,230,207,0.2); border-radius: 10px; padding: 1rem 1.25rem; font-size: 0.85rem; line-height: 1.8; color: rgba(255,255,255,0.85); }
   .score-badge { display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(168,230,207,0.15); color: var(--accent); border-radius: 999px; padding: 0.3rem 0.8rem; font-size: 0.8rem; font-weight: 500; margin-bottom: 0.75rem; }
 
+  .api-key-banner { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.25); border-radius: 10px; padding: 0.75rem 1.25rem; margin-bottom: 1.5rem; font-size: 0.82rem; color: #fbbf24; display: flex; align-items: center; gap: 0.6rem; }
+  .api-key-input { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 0.45rem 0.85rem; color: var(--fg); font-family: var(--font-body); font-size: 0.82rem; outline: none; width: 280px; }
+  .api-key-input::placeholder { color: rgba(255,255,255,0.25); }
+
   .loading-dots::after { content: '...'; animation: dots 1.2s steps(3,end) infinite; }
   @keyframes dots { 0%,20%{content:'.'} 40%{content:'..'} 60%,100%{content:'...'} }
 
@@ -184,144 +264,119 @@ const globalStyles = `
   }
 `;
 
-const ROADMAP = [
-  { level: "Deep Learning", icon: "🧠", current: true, topics: [
-    { name: "Neural Networks cơ bản", desc: "Perceptron, activation functions, backpropagation", progress: 60 },
-    { name: "CNNs", desc: "Convolutional Neural Networks cho xử lý ảnh", progress: 35 },
-    { name: "RNNs & LSTMs", desc: "Sequence modeling, time series, NLP cơ bản", progress: 20 },
-  ]},
-  { level: "Computer Vision", icon: "👁", current: false, topics: [
-    { name: "Image Classification", desc: "ResNet, EfficientNet, Vision Transformers", progress: 0 },
-    { name: "Object Detection", desc: "YOLO, Faster R-CNN, detection pipelines", progress: 0 },
-    { name: "Segmentation", desc: "Semantic & instance segmentation, SAM", progress: 0 },
-  ]},
-  { level: "LLMs", icon: "💬", current: false, topics: [
-    { name: "Transformer Architecture", desc: "Attention mechanism, BERT, GPT internals", progress: 0 },
-    { name: "Fine-tuning & RLHF", desc: "LoRA, QLoRA, instruction tuning", progress: 0 },
-    { name: "RAG Systems", desc: "Retrieval-Augmented Generation, vector stores", progress: 0 },
-  ]},
-  { level: "GenAI", icon: "✨", current: false, topics: [
-    { name: "Diffusion Models", desc: "Stable Diffusion, DALL-E, image generation", progress: 0 },
-    { name: "Multimodal AI", desc: "Vision-language models, GPT-4V, Gemini", progress: 0 },
-    { name: "AI Agents", desc: "Autonomous agents, tool use, multi-agent systems", progress: 0 },
-  ]},
+const RANKS = [
+  { name:"Rookie",   icon:"🌱", min:0,     color:"#9ca3af", glow:"rgba(156,163,175,0.35)" },
+  { name:"Iron",     icon:"⚙️",  min:300,   color:"#b0bec5", glow:"rgba(176,190,197,0.35)" },
+  { name:"Bronze",   icon:"🥉", min:800,   color:"#cd7f32", glow:"rgba(205,127,50,0.45)"  },
+  { name:"Silver",   icon:"🥈", min:2000,  color:"#c0c0c0", glow:"rgba(192,192,192,0.45)" },
+  { name:"Gold",     icon:"🥇", min:4000,  color:"#fbbf24", glow:"rgba(251,191,36,0.5)"   },
+  { name:"Platinum", icon:"💎", min:8000,  color:"#7dd3fc", glow:"rgba(125,211,252,0.5)"  },
+  { name:"Diamond",  icon:"💠", min:15000, color:"#a78bfa", glow:"rgba(167,139,250,0.5)"  },
 ];
 
-const INITIAL_NEWS = [
-  {
-    type: "hot", tag: "Anthropic", title: "Claude 4 ra mắt với khả năng lập luận vượt trội",
-    desc: "Anthropic vừa công bố Claude 4 với context window 1M tokens và cải tiến đột phá về reasoning — mô hình có thể tự kiểm tra lỗi và sửa câu trả lời theo từng bước.",
-    meta: "2 giờ trước · Anthropic Blog", source: "anthropic.com", url: "https://anthropic.com/news",
-    fullBody: `Anthropic vừa chính thức ra mắt Claude 4, phiên bản mới nhất trong dòng Large Language Model (LLM) của họ, đánh dấu một bước tiến lớn trong lĩnh vực Artificial Intelligence. Điểm nổi bật nhất là context window được mở rộng lên 1 triệu tokens, cho phép mô hình xử lý và phân tích các tài liệu cực dài mà không mất thông tin ngữ cảnh.
-
-Khả năng reasoning (lập luận) của Claude 4 được cải tiến đáng kể nhờ kỹ thuật mới gọi là Extended Thinking. Thay vì trả lời ngay lập tức, mô hình sẽ tự "suy nghĩ" qua nhiều bước, kiểm tra lại logic của mình và tự phát hiện lỗi trước khi đưa ra câu trả lời cuối cùng. Đây là bước tiến quan trọng trong việc giảm thiểu hiện tượng Hallucination — khi AI tự tạo ra thông tin không chính xác.
-
-Về mặt kỹ thuật, Claude 4 sử dụng kiến trúc Transformer cải tiến với cơ chế Attention được tối ưu hóa cho việc xử lý chuỗi dài. Anthropic cũng áp dụng phương pháp Constitutional AI (CAI) — một hệ thống huấn luyện mà mô hình tự đánh giá và điều chỉnh hành vi của mình dựa trên các nguyên tắc an toàn được định sẵn.
-
-Claude 4 có sẵn qua API và ứng dụng Claude.ai. Phiên bản Opus 4 dành cho các tác vụ phức tạp như lập trình, phân tích dữ liệu và nghiên cứu, trong khi Sonnet 4 cân bằng giữa tốc độ và chất lượng cho việc sử dụng hàng ngày. Haiku 4.5 phục vụ các tác vụ cần phản hồi nhanh với chi phí thấp.`,
-    glossary: [
-      { term: "Large Language Model (LLM)", def: "Mô hình ngôn ngữ lớn — hệ thống AI được huấn luyện trên lượng dữ liệu văn bản khổng lồ để hiểu và sinh ngôn ngữ tự nhiên" },
-      { term: "Context Window", def: "Cửa sổ ngữ cảnh — lượng thông tin (đo bằng tokens) mà mô hình có thể xử lý cùng lúc trong một lần hội thoại" },
-      { term: "Reasoning", def: "Khả năng lập luận, suy luận logic của AI để giải quyết vấn đề phức tạp" },
-      { term: "Hallucination", def: "Hiện tượng AI tự tạo ra thông tin sai nhưng trông có vẻ đúng và thuyết phục" },
-      { term: "Constitutional AI (CAI)", def: "Phương pháp huấn luyện AI tự đánh giá và điều chỉnh câu trả lời dựa trên bộ nguyên tắc đạo đức và an toàn" },
-      { term: "Transformer", def: "Kiến trúc mạng nơ-ron sử dụng cơ chế Attention, nền tảng của hầu hết LLM hiện đại" },
-    ],
-  },
-  {
-    type: "wiki", tag: "Wikipedia · Lịch sử AI & Luật", title: "People v. Collins — Khi Xác Suất Đi Vào Phòng Xử Án",
-    desc: "Năm 1968, một vụ án tại California lần đầu dùng lý thuyết xác suất để buộc tội bị cáo. Tòa án Tối cao sau đó bác bỏ vì áp dụng sai thống kê Bayes — bài học kinh điển về giới hạn của toán học trong hệ thống pháp lý.",
-    meta: "Wikipedia · Cập nhật 2024", source: "en.wikipedia.org", url: "https://en.wikipedia.org/wiki/People_v._Collins",
-    fullBody: `Vụ án People v. Collins (1968) là một trong những vụ án nổi tiếng nhất trong lịch sử luật pháp Mỹ liên quan đến việc sử dụng Probability Theory (lý thuyết xác suất) trong tố tụng hình sự. Vụ án xảy ra tại Los Angeles, California, khi một phụ nữ lớn tuổi bị giật túi xách bởi một cặp đôi có đặc điểm nhận dạng cụ thể.
-
-Công tố viên đã mời một giáo sư toán học ra làm chứng, sử dụng phương pháp Product Rule trong Probability để tính xác suất rằng một cặp đôi ngẫu nhiên có tất cả các đặc điểm trùng khớp với mô tả nhân chứng. Ông ấy gán xác suất cho từng đặc điểm riêng lẻ — ví dụ: xe màu vàng (1/10), đàn ông có râu (1/4), phụ nữ tóc vàng (1/3) — rồi nhân tất cả lại để ra con số 1/12.000.000.
-
-Tuy nhiên, Tòa án Tối cao California đã bác bỏ phán quyết. Lý do chính là công tố viên đã vi phạm nguyên tắc Statistical Independence — giả định rằng các đặc điểm hoàn toàn độc lập với nhau, điều này không đúng trong thực tế. Ngoài ra, việc áp dụng Prosecutor's Fallacy — nhầm lẫn giữa xác suất trùng khớp ngẫu nhiên với xác suất vô tội — đã dẫn đến kết luận sai lệch.
-
-Vụ án này trở thành bài học kinh điển trong cả luật pháp và thống kê. Nó cho thấy rằng ngay cả những công cụ toán học mạnh mẽ như Bayesian Statistics cũng có thể bị lạm dụng nếu không hiểu đúng các giả định cơ bản. Ngày nay, vụ án thường được giảng dạy trong các khóa học về Forensic Statistics và AI Ethics để minh họa tầm quan trọng của việc áp dụng đúng phương pháp thống kê.`,
-    glossary: [
-      { term: "Probability Theory", def: "Lý thuyết xác suất — nhánh toán học nghiên cứu các hiện tượng ngẫu nhiên và khả năng xảy ra của sự kiện" },
-      { term: "Product Rule", def: "Quy tắc nhân xác suất — P(A và B) = P(A) × P(B), chỉ đúng khi A và B độc lập" },
-      { term: "Statistical Independence", def: "Tính độc lập thống kê — hai sự kiện không ảnh hưởng đến xác suất xảy ra của nhau" },
-      { term: "Prosecutor's Fallacy", def: "Ngụy biện công tố — nhầm lẫn xác suất bằng chứng khi vô tội với xác suất vô tội khi có bằng chứng" },
-      { term: "Bayesian Statistics", def: "Thống kê Bayes — phương pháp cập nhật niềm tin dựa trên bằng chứng mới, sử dụng công thức Bayes" },
-      { term: "Forensic Statistics", def: "Thống kê pháp y — ứng dụng thống kê vào điều tra và tố tụng hình sự" },
-    ],
-  },
-  {
-    type: "paper", tag: "arXiv · Google Brain · 2017", title: "\"Attention Is All You Need\" — Paper Đổi Lịch Sử NLP",
-    desc: "Vaswani et al. giới thiệu kiến trúc Transformer năm 2017 — loại bỏ hoàn toàn RNN và CNN, chỉ dùng cơ chế Attention. Nền tảng của GPT, BERT và mọi LLM hiện đại.",
-    meta: "Vaswani, Shazeer et al. · Google Brain", source: "arxiv.org", url: "https://arxiv.org/abs/1706.03762",
-    fullBody: `Paper "Attention Is All You Need" được công bố bởi nhóm nghiên cứu tại Google Brain vào năm 2017, do Ashish Vaswani cùng các đồng tác giả thực hiện. Bài báo giới thiệu kiến trúc Transformer — một mô hình hoàn toàn mới loại bỏ hoàn toàn Recurrent Neural Networks (RNNs) và Convolutional Neural Networks (CNNs) trong xử lý ngôn ngữ tự nhiên, chỉ dựa vào cơ chế Self-Attention.
-
-Ý tưởng cốt lõi của Transformer là cơ chế Multi-Head Attention, cho phép mô hình "nhìn" vào tất cả các vị trí trong chuỗi đầu vào cùng một lúc thay vì xử lý tuần tự từng bước như RNN. Điều này giải quyết hai vấn đề lớn: thứ nhất, khả năng Parallelization (xử lý song song) giúp tăng tốc huấn luyện đáng kể; thứ hai, mô hình có thể nắm bắt các Long-Range Dependencies (phụ thuộc tầm xa) tốt hơn nhiều so với RNN vốn bị giới hạn bởi Vanishing Gradient Problem.
-
-Kiến trúc Transformer sử dụng cấu trúc Encoder-Decoder. Encoder mã hóa chuỗi đầu vào thành các biểu diễn vector, trong khi Decoder sinh ra chuỗi đầu ra từng token một. Mỗi lớp trong Encoder và Decoder đều chứa Multi-Head Attention, Feed-Forward Neural Networks, Layer Normalization và Residual Connections. Positional Encoding được thêm vào để mô hình biết được vị trí tương đối của các tokens.
-
-Paper này được trích dẫn hơn 100.000 lần và trở thành nền tảng cho hầu hết mọi mô hình ngôn ngữ lớn hiện đại. BERT (Google, 2018) sử dụng phần Encoder, GPT (OpenAI, 2018) sử dụng phần Decoder, và các mô hình sau này như GPT-4, Claude, LLaMA, Gemini đều dựa trên biến thể của kiến trúc Transformer gốc.`,
-    glossary: [
-      { term: "Self-Attention", def: "Cơ chế cho phép mỗi phần tử trong chuỗi 'chú ý' đến tất cả các phần tử khác để tính toán biểu diễn của mình" },
-      { term: "Multi-Head Attention", def: "Chạy nhiều phép Attention song song với các trọng số khác nhau, giúp mô hình nắm bắt các loại quan hệ khác nhau" },
-      { term: "Encoder-Decoder", def: "Kiến trúc 2 phần: Encoder mã hóa đầu vào, Decoder sinh đầu ra dựa trên mã hóa đó" },
-      { term: "Positional Encoding", def: "Vector được thêm vào embedding để mã hóa thông tin vị trí, vì Attention không có khái niệm thứ tự" },
-      { term: "Vanishing Gradient Problem", def: "Vấn đề gradient biến mất khi lan truyền ngược qua nhiều lớp, khiến RNN khó học các phụ thuộc dài" },
-      { term: "Residual Connections", def: "Kết nối tắt (skip connections) giúp gradient lan truyền dễ dàng qua các lớp sâu" },
-    ],
-  },
-  {
-    type: "social", tag: "Trending · X / Reddit AI", title: "Chain-of-Thought Prompting Đang Viral Trên Cộng Đồng AI",
-    desc: "Kỹ thuật yêu cầu AI 'suy nghĩ từng bước một' trước khi trả lời đang lan rộng sau khi nhiều developer chia sẻ kết quả ấn tượng — tỉ lệ đúng tăng 40% với bài toán toán học phức tạp.",
-    meta: "Trending hôm nay · AI Community", source: "x.com", url: "https://x.com/search?q=chain+of+thought+prompting",
-    fullBody: `Chain-of-Thought (CoT) Prompting là một kỹ thuật Prompt Engineering đang gây sốt trên các nền tảng mạng xã hội như X (Twitter) và Reddit, đặc biệt trong cộng đồng AI/ML. Ý tưởng đơn giản nhưng hiệu quả: thay vì yêu cầu AI trả lời trực tiếp, ta yêu cầu mô hình "suy nghĩ từng bước một" (think step by step) trước khi đưa ra câu trả lời cuối cùng.
-
-Kỹ thuật này được giới thiệu chính thức trong paper "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models" bởi Jason Wei et al. tại Google Brain năm 2022. Nghiên cứu cho thấy rằng chỉ cần thêm các ví dụ có bước giải trung gian vào prompt (Few-Shot CoT), độ chính xác của mô hình trên các bài toán số học tăng từ 17.9% lên 58.1% trên benchmark GSM8K. Đặc biệt, phiên bản Zero-Shot CoT — chỉ cần thêm câu "Let's think step by step" — cũng mang lại cải thiện đáng kể.
-
-Trên Reddit r/MachineLearning và X, nhiều developer chia sẻ các biến thể sáng tạo của CoT. Tree-of-Thoughts (ToT) mở rộng CoT bằng cách cho mô hình khám phá nhiều nhánh suy luận song song. Self-Consistency lấy mẫu nhiều chuỗi suy luận rồi chọn câu trả lời phổ biến nhất (Majority Voting). ReAct kết hợp reasoning với action, cho phép mô hình tương tác với môi trường bên ngoài.
-
-Lý do CoT hiệu quả vẫn đang được nghiên cứu. Giả thuyết phổ biến nhất là kỹ thuật này kích hoạt các Emergent Abilities — khả năng chỉ xuất hiện ở các mô hình đủ lớn (thường trên 100 tỷ Parameters). Khi mô hình "viết ra" các bước trung gian, nó thực chất đang sử dụng các tokens đầu ra như một dạng Working Memory tạm thời, mở rộng khả năng tính toán vượt ra ngoài giới hạn của một lần Forward Pass.`,
-    glossary: [
-      { term: "Prompt Engineering", def: "Kỹ thuật thiết kế câu lệnh (prompt) để khai thác tối đa khả năng của mô hình AI" },
-      { term: "Few-Shot / Zero-Shot", def: "Few-Shot: cho vài ví dụ mẫu. Zero-Shot: không cho ví dụ, chỉ mô tả yêu cầu" },
-      { term: "Tree-of-Thoughts (ToT)", def: "Mở rộng của CoT — mô hình khám phá nhiều nhánh suy luận thay vì chỉ một chuỗi tuyến tính" },
-      { term: "Self-Consistency", def: "Lấy mẫu nhiều chuỗi suy luận khác nhau rồi chọn đáp án xuất hiện nhiều nhất" },
-      { term: "Emergent Abilities", def: "Khả năng mới 'nổi lên' khi mô hình đạt đủ quy mô lớn, không xuất hiện ở mô hình nhỏ" },
-      { term: "Forward Pass", def: "Một lần truyền dữ liệu qua toàn bộ mạng nơ-ron từ đầu vào đến đầu ra" },
-    ],
-  },
-  {
-    type: "hot", tag: "OpenAI", title: "GPT-5 Vượt Ngưỡng 90% Trên Mọi Benchmark Toán Học",
-    desc: "OpenAI công bố GPT-5 đạt 92% độ chính xác trên AMC và AIME — lần đầu tiên một AI vượt qua mức trung bình của thí sinh dự thi toán quốc tế.",
-    meta: "4 giờ trước · OpenAI News", source: "openai.com", url: "https://openai.com/blog",
-    fullBody: `OpenAI vừa công bố kết quả benchmark ấn tượng của GPT-5 trên các bài kiểm tra toán học nâng cao. Mô hình đạt 92% độ chính xác trên AMC (American Mathematics Competition) và AIME (American Invitational Mathematics Examination) — đây là lần đầu tiên một hệ thống AI vượt qua mức trung bình của các thí sinh dự thi toán quốc tế.
-
-Điều đặc biệt là GPT-5 không chỉ giải được các bài toán đơn giản mà còn xử lý tốt các bài yêu cầu Multi-Step Reasoning — suy luận qua nhiều bước liên tiếp. Trên benchmark MATH (bộ 12.500 bài toán từ cấp phổ thông đến đại học), mô hình đạt 89.3%, tăng vọt so với GPT-4 chỉ đạt 52.9%. Trên GSM8K — bộ bài toán cấp tiểu học và trung học — GPT-5 đạt gần như hoàn hảo với 97.8%.
-
-OpenAI cho biết cải tiến đến từ ba yếu tố chính. Thứ nhất là Scale — mô hình được huấn luyện với lượng dữ liệu và tài nguyên tính toán lớn hơn đáng kể. Thứ hai là Process Reward Models (PRM) — hệ thống đánh giá không chỉ đáp án cuối cùng mà còn từng bước giải, giúp mô hình học cách reasoning tốt hơn. Thứ ba là Synthetic Data — dữ liệu toán học được tạo và kiểm chứng tự động bởi các hệ thống Formal Verification.
-
-Tuy nhiên, giới chuyên gia cũng lưu ý rằng benchmark scores không phải tất cả. Mô hình vẫn gặp khó khăn với các bài toán đòi hỏi Mathematical Intuition — khả năng "cảm nhận" hướng giải quyết mà chưa cần chứng minh chặt chẽ. Câu hỏi lớn vẫn còn: liệu AI có thực sự "hiểu" toán học hay chỉ đang Pattern Matching ở mức độ rất cao?`,
-    glossary: [
-      { term: "AMC / AIME", def: "Các kỳ thi toán học quốc gia tại Mỹ — AMC là vòng loại, AIME là vòng nâng cao dành cho top thí sinh" },
-      { term: "Multi-Step Reasoning", def: "Suy luận qua nhiều bước logic liên tiếp để đến đáp án cuối cùng" },
-      { term: "Benchmark", def: "Bộ bài kiểm tra tiêu chuẩn dùng để đo lường và so sánh hiệu suất của các mô hình AI" },
-      { term: "Process Reward Models (PRM)", def: "Mô hình thưởng cho từng bước giải, không chỉ đáp án cuối — giúp AI học reasoning tốt hơn" },
-      { term: "Formal Verification", def: "Phương pháp dùng toán học chặt chẽ để chứng minh tính đúng đắn của một chương trình hoặc lời giải" },
-      { term: "Pattern Matching", def: "Nhận dạng khuôn mẫu — AI nhận ra các mẫu tương tự trong dữ liệu đã học thay vì thực sự 'hiểu'" },
-    ],
-  },
+const QUEST_POOL = [
+  { id:"q1",  icon:"📰", text:"Đọc 1 bài AI News và tóm tắt", xp:40 },
+  { id:"q2",  icon:"🌏", text:"Dịch 1 đoạn tài liệu kỹ thuật", xp:60 },
+  { id:"q3",  icon:"💼", text:"Trả lời 1 câu phỏng vấn AI", xp:75 },
+  { id:"q4",  icon:"📖", text:"Học 1 thuật ngữ mới từ Glossary", xp:30 },
+  { id:"q5",  icon:"💬", text:"Chat với Claude về 1 bài viết", xp:50 },
+  { id:"q6",  icon:"✅", text:"Hoàn thành 3 custom tasks hôm nay", xp:55 },
+  { id:"q7",  icon:"🧠", text:"Mở và đọc bài Wikipedia AI", xp:35 },
+  { id:"q8",  icon:"🏆", text:"Đạt điểm 8/10+ trong phỏng vấn", xp:100 },
+  { id:"q9",  icon:"📄", text:"Dịch đoạn văn trên 200 từ", xp:80 },
+  { id:"q10", icon:"🔍", text:"Mở 2 bài AI News trong ngày", xp:45 },
+  { id:"q11", icon:"⚡", text:"Kiếm 100 XP trong một ngày", xp:70 },
+  { id:"q12", icon:"🎯", text:"Hoàn thành tất cả tasks trong danh sách", xp:90 },
 ];
 
-const INTERVIEW_QS = [
-  { q: "Giải thích cơ chế Attention trong Transformer là gì và tại sao nó quan trọng?", level: "medium" },
-  { q: "Sự khác biệt giữa Supervised, Unsupervised và Reinforcement Learning?", level: "easy" },
-  { q: "Backpropagation hoạt động như thế nào? Giải thích bằng lời.", level: "medium" },
-  { q: "Overfitting là gì? Các cách phòng tránh?", level: "easy" },
-  { q: "Convolutional Neural Network khác gì so với Fully Connected Network?", level: "medium" },
-  { q: "Gradient Vanishing problem là gì và cách giải quyết?", level: "hard" },
-  { q: "Giải thích cách hoạt động của LSTM so với RNN thông thường.", level: "hard" },
+const ACHIEVEMENTS_DEF = [
+  { id:"first_xp",      icon:"⚡", name:"First Spark",     desc:"Kiếm XP đầu tiên",                color:"#fbbf24" },
+  { id:"xp_300",        icon:"🌱", name:"Growing Up",      desc:"Đạt 300 XP",                      color:"#86efac" },
+  { id:"xp_800",        icon:"🥉", name:"Bronze Mind",     desc:"Đạt 800 XP",                      color:"#cd7f32" },
+  { id:"xp_2000",       icon:"🥈", name:"Silver Scholar",  desc:"Đạt 2000 XP",                     color:"#c0c0c0" },
+  { id:"xp_4000",       icon:"🥇", name:"Gold Grinder",    desc:"Đạt 4000 XP",                     color:"#fbbf24" },
+  { id:"streak_3",      icon:"🔥", name:"On Fire",         desc:"Streak 3 ngày liên tiếp",         color:"#f97316" },
+  { id:"streak_7",      icon:"⭐", name:"Week Warrior",    desc:"Streak 7 ngày liên tiếp",         color:"#eab308" },
+  { id:"tasks_5",       icon:"✅", name:"Task Starter",    desc:"Hoàn thành 5 tasks",              color:"#a8e6cf" },
+  { id:"tasks_20",      icon:"🎯", name:"Focused",         desc:"Hoàn thành 20 tasks",             color:"#a8e6cf" },
+  { id:"interview_1",   icon:"💼", name:"Candidate",       desc:"Hoàn thành 1 buổi phỏng vấn",    color:"#818cf8" },
+  { id:"translate_1",   icon:"🌏", name:"Translator",      desc:"Dịch tài liệu đầu tiên",          color:"#67e8f9" },
+  { id:"perfect_day",   icon:"👑", name:"Perfect Day",     desc:"Hoàn thành tất cả Daily Quests",  color:"#e879f9" },
 ];
+
+const SKILL_TREE = [
+  { id:"s1",  name:"Python Basics",       icon:"🐍", xpNeeded:0,     desc:"Variables, loops, functions",      tier:0 },
+  { id:"s2",  name:"NumPy & Pandas",      icon:"📊", xpNeeded:150,   desc:"Xử lý & phân tích dữ liệu",       tier:0 },
+  { id:"s3",  name:"Data Visualization",  icon:"📈", xpNeeded:300,   desc:"Matplotlib, Seaborn, Plotly",      tier:0 },
+  { id:"s4",  name:"Neural Networks",     icon:"🧠", xpNeeded:500,   desc:"Perceptron, backprop, activation", tier:1 },
+  { id:"s5",  name:"CNNs",               icon:"👁", xpNeeded:800,   desc:"Convolutional networks, pooling",   tier:1 },
+  { id:"s6",  name:"RNNs & LSTMs",       icon:"🔄", xpNeeded:1200,  desc:"Sequence models, time series",     tier:1 },
+  { id:"s7",  name:"Transformers",        icon:"⚡", xpNeeded:1800,  desc:"Attention mechanism, BERT, GPT",   tier:2 },
+  { id:"s8",  name:"Fine-tuning LLMs",   icon:"🔧", xpNeeded:2500,  desc:"LoRA, QLoRA, instruction tuning",  tier:2 },
+  { id:"s9",  name:"RAG Systems",        icon:"🔍", xpNeeded:3500,  desc:"Vector stores, retrieval",         tier:2 },
+  { id:"s10", name:"AI Agents",          icon:"🤖", xpNeeded:5000,  desc:"Tool use, multi-agent systems",    tier:3 },
+  { id:"s11", name:"Diffusion Models",   icon:"🎨", xpNeeded:7000,  desc:"Stable Diffusion, DALL-E",         tier:3 },
+  { id:"s12", name:"AI System Design",   icon:"🏗️", xpNeeded:10000, desc:"Production-grade AI systems",      tier:3 },
+];
+
+const TIER_LABELS = ["🐣 Foundations", "🔬 Deep Learning", "🧬 Language Models", "🚀 Advanced AI"];
+
+type NewsItem = {
+  type: string; tag: string; title: string; desc: string;
+  meta: string; source: string; url: string; keywords: string[];
+};
+
+const TECH_KW = ['AI','ML','LLM','GPT','AGI','Claude','OpenAI','Google','Meta','Microsoft','Apple','Amazon','Nvidia','GPU','Python','JavaScript','TypeScript','React','API','RAG','Transformer','RLHF','SaaS','DevOps','Kubernetes','Docker','GitHub','AWS','Azure','GCP','security','privacy','robotics','blockchain','database','cloud','startup','open source','open-source'];
+
+const extractKeywords = (title: string, tags?: string[]): string[] => {
+  if (tags?.length) return tags.slice(0, 4);
+  const found: string[] = [];
+  for (const t of TECH_KW) {
+    if (new RegExp(`\\b${t}\\b`, 'i').test(title)) { found.push(t); if (found.length >= 4) break; }
+  }
+  if (found.length >= 2) return found;
+  const caps = title.match(/\b[A-Z][A-Za-z0-9]{2,}\b/g) || [];
+  return [...new Set([...found, ...caps])].slice(0, 4);
+};
+
+type IvQuestion = { company: string; title: string; difficulty: string; link: string; topics: string };
+
+const IV_COMPANIES = [
+  "Google","Meta","Amazon","Microsoft","Apple","Netflix",
+  "OpenAI","Nvidia","Databricks","ByteDance","Uber","Airbnb",
+  "LinkedIn","Stripe","TikTok","Tesla",
+];
+
+const parseIvCSV = (company: string, text: string): IvQuestion[] => {
+  const lines = text.split('\n').filter(l => l.trim());
+  return lines.slice(1).map(line => {
+    const cols: string[] = [];
+    let cur = '', inQ = false;
+    for (const ch of line) {
+      if (ch === '"') { inQ = !inQ; }
+      else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+      else { cur += ch; }
+    }
+    cols.push(cur.trim());
+    return { company, difficulty: cols[0]||'', title: cols[1]||'', link: cols[4]||'', topics: cols[5]||'' };
+  }).filter(q => q.title && q.link.startsWith('http'));
+};
+
+// ─── WIKI AI TOPICS (Wikipedia API) ────────────────────────────────────────
+const WIKI_AI_TOPICS = [
+  "Artificial_neural_network", "Backpropagation", "Turing_test", "Perceptron",
+  "Convolutional_neural_network", "Recurrent_neural_network", "Generative_adversarial_network",
+  "Natural_language_processing", "Computer_vision", "Reinforcement_learning",
+  "Bayesian_network", "Support_vector_machine", "Gradient_descent",
+  "Overfitting", "Vanishing_gradient_problem", "Word2vec", "BERT_(language_model)",
+  "AlphaGo", "GPT-3", "Stable_Diffusion", "ChatGPT", "AI_alignment",
+  "Explainable_artificial_intelligence", "Transfer_learning", "Transformer_(machine_learning_model)",
+  "Attention_Is_All_You_Need", "Large_language_model", "Prompt_engineering",
+];
+
+const AI_KEYWORDS = /\b(ai|artificial intelligence|machine learning|deep learning|neural|llm|gpt|claude|gemini|transformer|openai|anthropic|diffusion|nlp|computer vision|reinforcement|rlhf|fine.?tun|langchain|rag|vector|embedding|chatbot|language model)\b/i;
 
 type Task = { id: number; text: string; xp: number; done: boolean };
-type NewsItem = typeof INITIAL_NEWS[0];
 type ArticleData = { title: string; tag: string; meta: string; url: string; body: string; glossary: {term:string;def:string}[]; loading: boolean; };
 
 export default function PucPortfolio() {
@@ -331,12 +386,36 @@ export default function PucPortfolio() {
   const artChatEndRef = useRef<HTMLDivElement>(null);
   const newsScrollRef = useRef<HTMLDivElement>(null);
 
-  const [news, setNews] = useState<NewsItem[]>(INITIAL_NEWS);
+  // ── Claude API Key (from .env or runtime input) ──────────────────────────
+  const envKey = import.meta.env.VITE_GEMINI_KEY || "";
+  const [geminiKey, setGeminiKey] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem("puc_gemini_key")
+        || localStorage.getItem("puc_claude_key")
+        || envKey;
+      if (saved) localStorage.setItem("puc_gemini_key", saved);
+      return saved;
+    } catch { return envKey; }
+  });
+  // ref luôn giữ giá trị mới nhất, tránh stale closure trong async functions
+  const geminiKeyRef = useRef(geminiKey);
+  useEffect(() => { geminiKeyRef.current = geminiKey; }, [geminiKey]);
+
+  const [keyInput, setKeyInput] = useState("");
+
+  const saveKey = () => {
+    const k = keyInput.trim();
+    if (!k) return;
+    setGeminiKey(k);
+    geminiKeyRef.current = k;
+    try { localStorage.setItem("puc_gemini_key", k); } catch {}
+    setKeyInput("");
+  };
+
+  const [news, setNews] = useState<NewsItem[]>([]);
   const [newsLoading, setNewsLoading] = useState(false);
   const [expandedNews, setExpandedNews] = useState<number|null>(null);
-  const [newsDetail, setNewsDetail] = useState<{[k:number]:string}>({});
 
-  // Article page
   const [article, setArticle] = useState<ArticleData|null>(null);
 
   const [inputText, setInputText] = useState("");
@@ -348,7 +427,20 @@ export default function PucPortfolio() {
   const [artChatMsgs, setArtChatMsgs] = useState<{role:string;text:string}[]>([]);
   const [artChatInput, setArtChatInput] = useState("");
   const [artChatLoading, setArtChatLoading] = useState(false);
-  const [preloaded, setPreloaded] = useState<{[k:number]:{body:string;glossary:{term:string;def:string}[]}}>({});
+
+  type VBotMsg = { role: "user"|"ai"; text: string; correction?: string };
+  type VBotMode = "free"|"grammar"|"joke"|"debate";
+  const [vMsgs, setVMsgs] = useState<VBotMsg[]>([]);
+  const [vInput, setVInput] = useState("");
+  const [vLoading, setVLoading] = useState(false);
+  const [vMode, setVMode] = useState<VBotMode>("free");
+  const [vListening, setVListening] = useState(false);
+  const [vSpeaking, setVSpeaking] = useState(false);
+  const [vStatus, setVStatus] = useState("Tap the mic to start talking");
+  const vEndRef = useRef<HTMLDivElement>(null);
+  const vRecogRef = useRef<any>(null);
+  const vMediaRecorderRef = useRef<MediaRecorder|null>(null);
+  const vAudioChunksRef = useRef<Blob[]>([]);
 
   const [tasks, setTasks] = useState<Task[]>(() => {
     try { return JSON.parse(localStorage.getItem("puc_tasks_v2")||"null") || [
@@ -359,18 +451,69 @@ export default function PucPortfolio() {
     ]; } catch { return []; }
   });
   const [xp, setXp] = useState<number>(() => { try { return parseInt(localStorage.getItem("puc_xp")||"0"); } catch { return 0; } });
-  const [streak] = useState(3);
-  const [activeLevel, setActiveLevel] = useState(0);
+  const [streak, setStreak] = useState<number>(() => {
+    try {
+      const d = JSON.parse(localStorage.getItem("puc_streak_v2") || "null");
+      if (!d) return 0;
+      const today = new Date().toDateString();
+      const yesterday = new Date(Date.now() - 86400000).toDateString();
+      if (d.last === today || d.last === yesterday) return d.count;
+      return 0;
+    } catch { return 0; }
+  });
+  const [gameStats, setGameStats] = useState<{totalTasksDone:number;interviewsDone:number;translationsDone:number;articlesRead:number;questsDone:number;perfectDays:number}>(() => {
+    try { return JSON.parse(localStorage.getItem("puc_game_stats") || "null") || {totalTasksDone:0,interviewsDone:0,translationsDone:0,articlesRead:0,questsDone:0,perfectDays:0}; }
+    catch { return {totalTasksDone:0,interviewsDone:0,translationsDone:0,articlesRead:0,questsDone:0,perfectDays:0}; }
+  });
+  const [unlockedAchievements, setUnlockedAchievements] = useState<string[]>(() => {
+    try { return JSON.parse(localStorage.getItem("puc_achievements") || "[]"); } catch { return []; }
+  });
+  const [dailyQuestsDone, setDailyQuestsDone] = useState<string[]>(() => {
+    try {
+      const d = JSON.parse(localStorage.getItem("puc_daily_quests") || "null");
+      if (d?.date === new Date().toDateString()) return d.done;
+    } catch {}
+    return [];
+  });
+  const [gameTab, setGameTab] = useState<"quests"|"tasks"|"skills"|"achievements">("tasks");
   const [openQ, setOpenQ] = useState<number|null>(null);
   const [answers, setAnswers] = useState<{[k:number]:string}>({});
   const [feedbacks, setFeedbacks] = useState<{[k:number]:string}>({});
   const [feedbackLoading, setFeedbackLoading] = useState<{[k:number]:boolean}>({});
+  const [ivPool, setIvPool] = useState<IvQuestion[]>([]);
+  const [ivPoolLoading, setIvPoolLoading] = useState(true);
+  const [ivDisplayed, setIvDisplayed] = useState<IvQuestion[]>([]);
+  const ivPoolRef = useRef<IvQuestion[]>([]);
 
   useEffect(() => {
     const style = document.createElement("style");
     style.textContent = globalStyles;
     document.head.appendChild(style);
     return () => { document.head.removeChild(style); };
+  }, []);
+
+  useEffect(() => {
+    const base = "https://raw.githubusercontent.com/liquidslr/interview-company-wise-problems/main";
+    Promise.allSettled(
+      IV_COMPANIES.map(c =>
+        fetch(`${base}/${encodeURIComponent(c)}/5.%20All.csv`)
+          .then(r => r.ok ? r.text() : Promise.reject())
+          .then(text => parseIvCSV(c, text))
+          .catch(() => [] as IvQuestion[])
+      )
+    ).then(results => {
+      const all: IvQuestion[] = [];
+      for (const r of results) if (r.status === "fulfilled") all.push(...r.value);
+      // shuffle
+      for (let i = all.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [all[i], all[j]] = [all[j], all[i]];
+      }
+      ivPoolRef.current = all;
+      setIvPool(all);
+      setIvDisplayed(all.slice(0, 5));
+      setIvPoolLoading(false);
+    });
   }, []);
 
   useEffect(() => {
@@ -399,21 +542,20 @@ export default function PucPortfolio() {
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior:"smooth" }); }, [chatMsgs]);
   useEffect(() => { artChatEndRef.current?.scrollIntoView({ behavior:"smooth" }); }, [artChatMsgs]);
 
-  // Auto-scroll news carousel — pause when a card is expanded or on hover
   useEffect(() => {
     const el = newsScrollRef.current;
     if (!el || expandedNews !== null) return;
     let animId: number;
     let paused = false;
+    let dir = 1;
     const pause = () => { paused = true; };
     const resume = () => { paused = false; };
     const step = () => {
       if (!paused) {
-        if (el.scrollLeft >= el.scrollWidth - el.clientWidth - 1) {
-          el.scrollLeft = 0;
-        } else {
-          el.scrollLeft += 0.6;
-        }
+        const max = el.scrollWidth - el.clientWidth;
+        el.scrollLeft += 0.6 * dir;
+        if (dir === 1 && el.scrollLeft >= max - 1) { el.scrollLeft = max; dir = -1; }
+        else if (dir === -1 && el.scrollLeft <= 0) { el.scrollLeft = 0; dir = 1; }
       }
       animId = requestAnimationFrame(step);
     };
@@ -429,270 +571,456 @@ export default function PucPortfolio() {
     };
   }, [expandedNews]);
 
-  // Lock body scroll when article open
   useEffect(() => {
     document.body.style.overflow = article ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [article]);
 
+  // ── On mount: load from pool or fetch fresh ────────────────────────────
+  useEffect(() => {
+    fetchAndBuildNews();
+  }, []);
+
+  // Midnight refresh — clear pool so fresh articles are fetched for the new day
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    const scheduleNext = () => {
+      const now = new Date();
+      const midnight = new Date(now);
+      midnight.setDate(midnight.getDate() + 1);
+      midnight.setHours(0, 0, 0, 0);
+      timer = setTimeout(() => {
+        localStorage.removeItem("puc_news_pool");
+        localStorage.removeItem("puc_news_seen");
+        fetchAndBuildNews();
+        scheduleNext();
+      }, midnight.getTime() - now.getTime());
+    };
+    scheduleNext();
+    return () => clearTimeout(timer);
+  }, []);
+
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior:"smooth" });
 
-  // --- DAILY NEWS SYSTEM ---
-  const AI_KEYWORDS = /\b(ai|artificial intelligence|machine learning|deep learning|neural|llm|gpt|claude|gemini|transformer|openai|anthropic|diffusion|nlp|computer vision|reinforcement learning|rlhf|fine.?tun|langchain|rag|vector|embedding)\b/i;
+  // ────────────────────────────────────────────────────────────────────────
+  // JSON helper — handles Claude responses with literal newlines in strings
+  // ────────────────────────────────────────────────────────────────────────
+  const parseClaudeJSON = (raw: string): any => {
+    const cleaned = raw.replace(/```json\n?|```/g, "").trim();
+    const block = cleaned.match(/\{[\s\S]*\}/)?.[0] ?? cleaned;
+    try { return JSON.parse(block); } catch {}
+    // Sanitize literal control chars inside JSON string values and retry
+    const sanitized = block.replace(/("(?:[^"\\]|\\.)*")/g, m =>
+      m.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t")
+    );
+    return JSON.parse(sanitized);
+  };
 
-  const WIKI_AI_TOPICS = [
-    "Artificial_neural_network", "Backpropagation", "Turing_test", "ELIZA", "Perceptron",
-    "Convolutional_neural_network", "Recurrent_neural_network", "Generative_adversarial_network",
-    "Natural_language_processing", "Computer_vision", "Reinforcement_learning", "Expert_system",
-    "Bayesian_network", "Support_vector_machine", "Random_forest", "Gradient_descent",
-    "Overfitting", "Vanishing_gradient_problem", "Word2vec", "BERT_(language_model)",
-    "ImageNet", "AlphaGo", "GPT-3", "Stable_Diffusion", "DALL-E", "ChatGPT",
-    "AI_alignment", "Existential_risk_from_artificial_general_intelligence",
-    "Chinese_room", "Moravec%27s_paradox", "Frame_problem", "Symbol_grounding_problem",
-    "Explainable_artificial_intelligence", "Federated_learning", "Transfer_learning",
-  ];
+  // ────────────────────────────────────────────────────────────────────────
+  // CLAUDE API  (claude-haiku-4-5 for speed, sonnet for quality)
+  // ────────────────────────────────────────────────────────────────────────
+  const callGemini = async (
+    prompt: string,
+    systemInstruction = "Bạn là trợ lý AI chuyên về công nghệ. Trả lời bằng tiếng Việt, ngắn gọn, dễ hiểu.",
+    maxTokens = 1500,
+    _fast = false
+  ): Promise<string> => {
+    const key = geminiKeyRef.current;
+    if (!key) return "⚠️ Chưa có HuggingFace token. Nhập token (hf_...) ở phần Luyện Tiếng Anh để dùng tính năng AI.";
+    try {
+      const res = await fetch("https://router.huggingface.co/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${key}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "mistralai/Mistral-7B-Instruct-v0.3",
+          messages: [
+            { role: "system", content: systemInstruction },
+            { role: "user", content: prompt },
+          ],
+          max_tokens: maxTokens,
+          temperature: 0.85,
+        }),
+      });
+      const data = await res.json();
+      if (data.error) return `Lỗi HuggingFace: ${data.error.message || JSON.stringify(data.error)}`;
+      return data.choices?.[0]?.message?.content || "Không có phản hồi.";
+    } catch (e) {
+      return `Lỗi kết nối: ${(e as Error).message}`;
+    }
+  };
 
-  const fetchHNStories = async (): Promise<{title:string;url:string;source:string}[]> => {
+  // ────────────────────────────────────────────────────────────────────────
+  // HACKER NEWS API  (free, no key)
+  // ────────────────────────────────────────────────────────────────────────
+  const fetchHNStories = async (): Promise<{title:string;url:string;source:string;isTech:boolean}[]> => {
     try {
       const idsRes = await fetch("https://hacker-news.firebaseio.com/v0/topstories.json");
       const ids: number[] = await idsRes.json();
       const stories = await Promise.all(
-        ids.slice(0, 40).map(id =>
-          fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(r => r.json())
+        ids.slice(0, 60).map(id =>
+          fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(r => r.json()).catch(() => null)
         )
       );
+      const TECH_DOMAINS = /github\.com|techcrunch|wired|theverge|arstechnica|venturebeat|zdnet|thenextweb|medium\.com|substack|openai|anthropic|google|meta\.com|nvidia|huggingface|arxiv|nature\.com|science|acm\.org|ieee|stackoverflow|dev\.to/i;
+      const SKIP_KW = /\b(sports|music|movie|film|football|soccer|recipe|cook|garden|travel|horoscope|celebrity|gossip|fashion|beauty|diet|weight)\b/i;
       return stories
-        .filter((s: any) => s?.title && AI_KEYWORDS.test(s.title))
-        .slice(0, 2)
-        .map((s: any) => ({ title: s.title, url: s.url || `https://news.ycombinator.com/item?id=${s.id}`, source: "news.ycombinator.com" }));
+        .filter((s: any) => s?.title && s?.url && !SKIP_KW.test(s.title))
+        .map((s: any) => ({
+          title: s.title,
+          url: s.url,
+          source: new URL(s.url).hostname.replace("www.",""),
+          isTech: TECH_DOMAINS.test(s.url) || AI_KEYWORDS.test(s.title),
+        }))
+        .sort((a: any, b: any) => (b.isTech ? 1 : 0) - (a.isTech ? 1 : 0));
     } catch { return []; }
   };
 
-  const fetchRedditAI = async (): Promise<{title:string;url:string;source:string;score:number}[]> => {
+  // ────────────────────────────────────────────────────────────────────────
+  // WIKIPEDIA API  (free, no key, random AI topic)
+  // ────────────────────────────────────────────────────────────────────────
+  const fetchWikiAI = async (): Promise<{title:string;extract:string;url:string}[]> => {
+    const results: {title:string;extract:string;url:string}[] = [];
+    const indices = new Set<number>();
+    while (indices.size < 5) indices.add(Math.floor(Math.random() * WIKI_AI_TOPICS.length));
+    await Promise.all([...indices].map(async idx => {
+      try {
+        const topic = WIKI_AI_TOPICS[idx];
+        const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${topic}`);
+        const data = await res.json();
+        if (data.extract) results.push({
+          title: data.title,
+          extract: data.extract,
+          url: data.content_urls?.desktop?.page || `https://en.wikipedia.org/wiki/${topic}`,
+        });
+      } catch {}
+    }));
+    return results;
+  };
+
+  const fetchDevTo = async (): Promise<NewsItem[]> => {
     try {
-      const res = await fetch("https://www.reddit.com/r/MachineLearning/hot.json?limit=20");
-      const data = await res.json();
-      return (data?.data?.children || [])
-        .map((c: any) => c.data)
-        .filter((p: any) => p && !p.stickied && p.score > 50)
-        .slice(0, 2)
-        .map((p: any) => ({ title: p.title, url: `https://reddit.com${p.permalink}`, source: "reddit.com/r/MachineLearning", score: p.score }));
+      // Fetch from multiple hot tech tags for variety
+      const tags = ["ai","machinelearning","webdev","javascript","typescript","python","programming","devops","cloud","security"];
+      const picked = tags.sort(() => Math.random() - 0.5).slice(0, 4);
+      const results = await Promise.all(
+        picked.map(tag =>
+          fetch(`https://dev.to/api/articles?tag=${tag}&per_page=20&top=3`)
+            .then(r => r.json()).catch(() => [])
+        )
+      );
+      const all: any[] = results.flat();
+      const seen = new Set<string>();
+      return all
+        .filter((a: any) => a?.title && a?.url && !seen.has(a.url) && seen.add(a.url))
+        .sort(() => Math.random() - 0.5)
+        .map((a: any) => ({
+          type: "devto",
+          tag: "Dev.to",
+          title: a.title,
+          desc: a.description || "",
+          meta: new Date(a.published_at).toLocaleDateString("en-US", { month:"short", day:"numeric" }) + " · Dev.to",
+          source: "dev.to",
+          url: a.url,
+          keywords: (a.tag_list || []).slice(0, 4),
+        }));
     } catch { return []; }
   };
 
-  const fetchWikiAI = async (): Promise<{title:string;extract:string;url:string}|null> => {
+  // GitHub Trending (via unofficial scrape-free API)
+  const fetchGithubTrending = async (): Promise<NewsItem[]> => {
     try {
-      const topic = WIKI_AI_TOPICS[Math.floor(Math.random() * WIKI_AI_TOPICS.length)];
-      const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${topic}`);
-      const data = await res.json();
-      return { title: data.title, extract: data.extract || "", url: data.content_urls?.desktop?.page || `https://en.wikipedia.org/wiki/${topic}` };
-    } catch { return null; }
+      const r = await fetch("https://api.gitterapp.com/repositories?since=daily&spoken_language_code=en");
+      const data: any[] = await r.json();
+      return data.slice(0, 20).map((repo: any) => ({
+        type: "github",
+        tag: "GitHub Trending",
+        title: `⭐ ${repo.name} — ${repo.description?.slice(0, 80) || ""}`,
+        desc: repo.description || "",
+        meta: `${repo.stars_today || ""} stars today · ${repo.language || ""}`.trim().replace(/^·\s*/, ""),
+        source: "github.com",
+        url: repo.url || `https://github.com/${repo.author}/${repo.name}`,
+        keywords: [repo.language, ...(repo.tags || [])].filter(Boolean).slice(0, 4),
+      }));
+    } catch { return []; }
   };
 
-  const generateDailyNews = async () => {
+  // Reddit r/programming, r/technology, r/science via public JSON
+  const fetchReddit = async (): Promise<NewsItem[]> => {
+    const subs = ["programming","technology","MachineLearning","artificial","webdev","science","worldnews","todayilearned","interestingasfuck","futurology"];
+    const picked = subs.sort(() => Math.random() - 0.5).slice(0, 3);
+    const results = await Promise.all(picked.map(sub =>
+      fetch(`https://www.reddit.com/r/${sub}/hot.json?limit=10`)
+        .then(r => r.json()).catch(() => null)
+    ));
+    const items: NewsItem[] = [];
+    for (const res of results) {
+      if (!res?.data?.children) continue;
+      for (const { data: p } of res.data.children) {
+        if (!p?.title || p.stickied || p.over_18 || !p.url) continue;
+        const url = p.url.startsWith("https://www.reddit.com") || p.is_self
+          ? `https://www.reddit.com${p.permalink}` : p.url;
+        items.push({
+          type: "reddit",
+          tag: `r/${p.subreddit}`,
+          title: p.title,
+          desc: p.selftext?.slice(0, 200) || "",
+          meta: `${p.score?.toLocaleString()} upvotes · r/${p.subreddit}`,
+          source: p.domain || "reddit.com",
+          url,
+          keywords: extractKeywords(p.title),
+        });
+      }
+    }
+    return items;
+  };
+
+  // ────────────────────────────────────────────────────────────────────────
+  // BUILD NEWS  (HN + Dev.to + Wikipedia + GitHub + Reddit — pool system)
+  // ────────────────────────────────────────────────────────────────────────
+  const showFromPool = (pool: NewsItem[], seen: string[]): boolean => {
+    const unseen = pool.filter(a => !seen.includes(a.url));
+    if (unseen.length < 6) return false;
+    const displayed = unseen.slice(0, 6);
+    const remaining = unseen.slice(6);
+    const newSeen = [...seen, ...displayed.map(d => d.url)].slice(-400);
+    localStorage.setItem("puc_news_pool", JSON.stringify(remaining));
+    localStorage.setItem("puc_news_seen", JSON.stringify(newSeen));
+    setNews(displayed);
+    setExpandedNews(null);
+    return true;
+  };
+
+  const fetchAndBuildNews = async () => {
     setNewsLoading(true);
     try {
-      const [hn, reddit, wiki] = await Promise.all([fetchHNStories(), fetchRedditAI(), fetchWikiAI()]);
-
-      // Build raw items from fetched data
-      const rawItems: { type: string; tag: string; title: string; desc: string; source: string; url: string }[] = [];
-
-      hn.forEach(s => rawItems.push({ type: "hot", tag: "Hacker News", title: s.title, desc: s.title, source: s.source, url: s.url }));
-      reddit.forEach(p => rawItems.push({ type: "social", tag: "Reddit · r/MachineLearning", title: p.title, desc: p.title, source: p.source, url: p.url }));
-      if (wiki) rawItems.push({ type: "wiki", tag: `Wikipedia · ${wiki.title}`, title: wiki.title, desc: wiki.extract.slice(0, 200), source: "en.wikipedia.org", url: wiki.url });
-
-      // If we got less than 3 items, keep some from INITIAL_NEWS as filler
-      while (rawItems.length < 5 && rawItems.length < INITIAL_NEWS.length) {
-        rawItems.push(INITIAL_NEWS[rawItems.length]);
+      // Try showing from existing pool first
+      const poolRaw = localStorage.getItem("puc_news_pool");
+      const seenRaw = localStorage.getItem("puc_news_seen");
+      const seen: string[] = seenRaw ? JSON.parse(seenRaw) : [];
+      if (poolRaw && showFromPool(JSON.parse(poolRaw), seen)) {
+        setNewsLoading(false);
+        return;
       }
 
-      // Now translate + generate full articles via Claude (parallel, Haiku for speed)
-      const translated = await Promise.all(rawItems.slice(0, 5).map(async (item) => {
-        if ((item as any).fullBody) return item as NewsItem; // Already has full content (from INITIAL_NEWS fallback)
-        try {
-          const raw = await callClaude(
-            `Dịch và viết bài tiếng Việt chi tiết về chủ đề AI sau (4-5 đoạn, giữ nguyên thuật ngữ tiếng Anh):
-Tiêu đề gốc: "${item.title}"
-Mô tả: "${item.desc}"
-Nguồn: ${item.source}
-Format JSON: {"title":"Tiêu đề tiếng Việt hấp dẫn","desc":"2-3 câu mô tả tiếng Việt","fullBody":"nội dung bài đọc đầy đủ tiếng Việt với đoạn cách nhau bằng \\n\\n","glossary":[{"term":"Thuật ngữ EN","def":"Giải thích TV"}]}
-Chỉ JSON.`,
-            "Biên tập viên tech Việt Nam. Chỉ trả JSON thuần túy.",
-            true
-          );
-          const parsed = JSON.parse(raw.replace(/```json|```/g,"").trim());
-          return {
-            ...item,
-            title: parsed.title || item.title,
-            desc: parsed.desc || item.desc,
-            meta: new Date().toLocaleDateString("vi-VN") + " · " + item.source,
-            fullBody: parsed.fullBody || item.desc,
-            glossary: parsed.glossary || [],
-          } as NewsItem;
-        } catch {
-          return { ...item, meta: new Date().toLocaleDateString("vi-VN") + " · " + item.source, fullBody: item.desc, glossary: [] } as NewsItem;
-        }
+      // Pool exhausted → fetch fresh from all sources
+      const [hnStories, devToItems, wikiItems, ghItems, redditItems] = await Promise.all([
+        fetchHNStories(), fetchDevTo(), fetchWikiAI(), fetchGithubTrending(), fetchReddit(),
+      ]);
+
+      const all: NewsItem[] = [];
+
+      hnStories.forEach(s => all.push({
+        type: "hot", tag: "Hacker News",
+        title: s.title, desc: s.title,
+        meta: "Today · " + s.source, source: s.source, url: s.url,
+        keywords: extractKeywords(s.title),
       }));
 
-      setNews(translated);
-      setPreloaded({});
+      devToItems.forEach(d => all.push(d));
 
-      // Cache to localStorage
-      localStorage.setItem("puc_news_date", new Date().toDateString());
-      localStorage.setItem("puc_news_data", JSON.stringify(translated));
-    } catch {
-      // Keep INITIAL_NEWS on failure
+      wikiItems.forEach(w => all.push({
+        type: "wiki", tag: "Wikipedia",
+        title: w.title, desc: w.extract.slice(0, 220),
+        meta: "Wikipedia", source: "en.wikipedia.org", url: w.url,
+        keywords: extractKeywords(w.title),
+      }));
+
+      ghItems.forEach(g => all.push(g));
+      redditItems.forEach(r => all.push(r));
+
+      // Shuffle
+      for (let i = all.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [all[i], all[j]] = [all[j], all[i]];
+      }
+
+      // If everything already seen → reset seen and show fresh
+      const activeSeen = all.every(a => seen.includes(a.url)) ? [] : seen;
+      if (!showFromPool(all, activeSeen)) {
+        // Fewer than 6 total — just show all
+        setNews(all);
+        setExpandedNews(null);
+        localStorage.setItem("puc_news_pool", "[]");
+        localStorage.setItem("puc_news_seen", JSON.stringify(all.map(a => a.url)));
+      }
+    } catch (e) {
+      console.error("fetchAndBuildNews error:", e);
     }
     setNewsLoading(false);
   };
 
-  // On mount: check cache or fetch new daily news + set midnight timer
-  useEffect(() => {
-    const cachedDate = localStorage.getItem("puc_news_date");
-    const today = new Date().toDateString();
-
-    if (cachedDate === today) {
-      try {
-        const cached = JSON.parse(localStorage.getItem("puc_news_data") || "null");
-        if (cached?.length) { setNews(cached); return; }
-      } catch {}
-    }
-    // Fetch new news (only if API key is configured)
-    if (ANTHROPIC_KEY) generateDailyNews();
-  }, []);
-
-  // Midnight auto-refresh timer
-  useEffect(() => {
-    const now = new Date();
-    const midnight = new Date(now);
-    midnight.setDate(midnight.getDate() + 1);
-    midnight.setHours(0, 0, 0, 0);
-    const msUntilMidnight = midnight.getTime() - now.getTime();
-
-    const timer = setTimeout(() => {
-      if (ANTHROPIC_KEY) generateDailyNews();
-    }, msUntilMidnight);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Pre-generate all articles in background when news loads
-  const preloadArticles = (items: NewsItem[]) => {
-    setPreloaded({});
-    items.forEach((n, i) => {
-      callClaude(
-        `Viết bài đọc chi tiết về chủ đề sau bằng tiếng Việt (4-6 đoạn, mỗi đoạn 3-4 câu).
-Chủ đề: "${n.title}. ${n.desc}"
-Yêu cầu:
-- Giữ nguyên tất cả thuật ngữ tiếng Anh (như Neural Network, Fine-tuning, Benchmark, v.v.)
-- KHÔNG phân tích, KHÔNG nhận xét cá nhân — chỉ trình bày thông tin
-- Cuối bài thêm phần GLOSSARY liệt kê các thuật ngữ tiếng Anh với giải thích tiếng Việt
-Format JSON: {"body":"nội dung bài đọc với các đoạn cách nhau bằng \\n\\n","glossary":[{"term":"Tên thuật ngữ","def":"Giải thích tiếng Việt"}]}
-Chỉ JSON.`,
-        "Bạn là biên tập viên tech. Chỉ trả JSON thuần túy.",
-        true
-      ).then(raw => {
-        try {
-          const parsed = JSON.parse(raw.replace(/```json|```/g,"").trim());
-          setPreloaded(prev => ({ ...prev, [i]: { body: parsed.body||"", glossary: parsed.glossary||[] } }));
-        } catch {
-          setPreloaded(prev => ({ ...prev, [i]: { body: raw, glossary: [] } }));
-        }
-      });
-    });
-  };
-
-  // Note: preloadArticles is called by generateDailyNews and refreshNews
-
-  const ANTHROPIC_KEY = import.meta.env.VITE_ANTHROPIC_KEY || "";
-
-  const callClaude = async (prompt: string, system = "", fast = false) => {
-    if (!ANTHROPIC_KEY) return "API key chưa được cấu hình.";
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": ANTHROPIC_KEY,
-        "anthropic-version": "2023-06-01",
-        "anthropic-dangerous-direct-browser-access": "true",
-      },
-      body: JSON.stringify({
-        model: fast ? "claude-haiku-4-5-20251001" : "claude-sonnet-4-20250514",
-        max_tokens: fast ? 800 : 1500,
-        system: system || "Bạn là trợ lý AI chuyên về công nghệ. Trả lời bằng tiếng Việt, ngắn gọn, dễ hiểu.",
-        messages: [{ role:"user", content:prompt }],
-      }),
-    });
-    const data = await res.json();
-    return data.content?.[0]?.text || "Không có phản hồi.";
-  };
-
-  const fetchNewsDetail = async (idx: number) => {
-    if (expandedNews === idx) { setExpandedNews(null); return; }
-    setExpandedNews(idx);
-    if (newsDetail[idx]) return;
-    setNewsDetail(p => ({ ...p, [idx]:"loading" }));
-    const text = await callClaude(
-      `Phân tích ngắn 3-4 câu về tin AI này, tập trung ý nghĩa thực tế: "${news[idx].title}. ${news[idx].desc}"`,
-      "Chuyên gia AI. Phân tích súc tích bằng tiếng Việt.",
-      true
-    );
-    setNewsDetail(p => ({ ...p, [idx]:text }));
-  };
-
+  // ────────────────────────────────────────────────────────────────────────
+  // ARTICLE — open with full body (pre-existing or ask Claude to expand)
+  // ────────────────────────────────────────────────────────────────────────
   const openArticle = (idx: number) => {
     const n = news[idx];
     setArtChatMsgs([]);
     setArtChatInput("");
     setExpandedNews(null);
-    const pre = preloaded[idx];
     setArticle({
-      title: n.title, tag: n.tag, meta: n.meta, url: n.url,
-      body: pre?.body || n.fullBody || n.desc,
-      glossary: pre?.glossary || n.glossary || [],
+      title: n.title, tag: n.tag, meta: n.meta || "", url: n.url,
+      body: n.desc || "",
+      glossary: [],
       loading: false,
     });
   };
 
-  const refreshNews = async () => {
-    setNewsLoading(true);
-    const text = await callClaude(
-      `Tạo 5 bài tin đa dạng về AI bao gồm: 2 tin tức hot mới nhất, 1 bài Wikipedia về khái niệm/sự kiện AI thú vị, 1 tóm tắt paper khoa học AI nổi tiếng, 1 xu hướng mạng xã hội AI. Mỗi bài viết bằng tiếng Việt, desc 2-3 câu sinh động.
-JSON: [{"type":"hot|wiki|paper|social","tag":"Nguồn/Chủ đề","title":"Tiêu đề TV","desc":"2-3 câu TV sinh động","meta":"X giờ trước · Nguồn","source":"domain.com","url":"https://..."}]. Chỉ JSON thuần túy.`,
-      "Chỉ JSON thuần túy, không markdown.",
-      true
-    );
-    try {
-      const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
-      setNews(parsed);
-      setNewsDetail({});
-      setExpandedNews(null);
-      preloadArticles(parsed);
-    } catch {}
-    setNewsLoading(false);
-  };
-
+  // ── Article chat ─────────────────────────────────────────────────────────
   const sendArtChat = async () => {
     if (!artChatInput.trim() || !article) return;
     const msg = artChatInput; setArtChatInput("");
     setArtChatMsgs(p => [...p, { role:"user", text:msg }]);
     setArtChatLoading(true);
-    const ctx = article.body
-      ? `Tiêu đề bài: ${article.title}\nNội dung tóm tắt: ${article.body.slice(0,1200)}\n\n`
-      : `Bài đang xem: ${article.title}\n\n`;
-    const text = await callClaude(
-      `${ctx}Câu hỏi của người đọc: ${msg}`,
-      "Bạn là chuyên gia AI đang hỗ trợ người đọc hiểu bài viết. Trả lời bằng tiếng Việt, ngắn gọn và rõ ràng. Giữ nguyên thuật ngữ tiếng Anh kỹ thuật."
+    const ctx = article.body ? `Bài đang đọc: ${article.title}\nTóm tắt: ${article.body.slice(0, 1000)}\n\n` : `Bài: ${article.title}\n\n`;
+    const text = await callGemini(
+      `${ctx}Câu hỏi: ${msg}`,
+      "Chuyên gia AI hỗ trợ người đọc hiểu bài. Trả lời tiếng Việt, ngắn gọn, giữ thuật ngữ tiếng Anh."
     );
     setArtChatMsgs(p => [...p, { role:"ai", text }]);
     setArtChatLoading(false);
   };
 
+  // ── Translator ────────────────────────────────────────────────────────────
   const translateDoc = async () => {
     if (!inputText.trim()) return;
     setTransLoading(true); setTranslatedText("");
-    const text = await callClaude(`Dịch sang tiếng Việt, giữ thuật ngữ kỹ thuật và chú thích trong ngoặc:\n\n${inputText}`, "Dịch giả AI/Tech chuyên nghiệp.");
+    const text = await callGemini(
+      `Dịch toàn bộ nội dung sau sang tiếng Việt. Giữ nguyên tất cả thuật ngữ tiếng Anh kỹ thuật và chú thích trong ngoặc đơn khi cần:\n\n${inputText}`,
+      "Dịch giả AI/Tech chuyên nghiệp. Dịch chính xác, tự nhiên, giữ nguyên định dạng gốc.",
+      2048
+    );
     setTranslatedText(text); setTransLoading(false);
+    const ns = { ...gameStats, translationsDone: gameStats.translationsDone + 1 };
+    setGameStats(ns);
+    localStorage.setItem("puc_game_stats", JSON.stringify(ns));
+    checkAchievements(ns, xp, streak);
+  };
+
+  const VBOT_PROMPTS: Record<VBotMode, string> = {
+    free:    `You are Aria, a witty and warm English conversation partner. Keep replies SHORT (2-3 sentences max) — this is voice chat. Occasionally make natural jokes or puns. If the user makes a grammar mistake, add at the very end: [FIX: "wrong" → "correct"]. Always ask a follow-up question.`,
+    grammar: `You are Aria, an English grammar coach. For each message: 1) Note any grammar errors as [FIX: "wrong" → "correct" — reason]. 2) Continue conversation naturally. Keep replies SHORT (2-3 sentences) — voice chat.`,
+    joke:    `You are Aria, a hilarious English comedy AI. Your job: be funny! Tell jokes, puns, riddles. Explain wordplay if needed. Gently fix grammar: [FIX: ...]. Keep energy HIGH. Short replies — voice chat.`,
+    debate:  `You are Aria, a sharp debate partner. Always argue the OPPOSITE side. Be direct, use rhetorical questions. Fix grammar: [FIX: ...]. Short punchy replies — voice chat.`,
+  };
+
+  const speakText = (text: string) => {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const clean = text.replace(/\[FIX:.*?\]/gs, "").trim();
+    const utt = new SpeechSynthesisUtterance(clean);
+    utt.lang = "en-US";
+    utt.rate = 1.05;
+    utt.pitch = 1.05;
+    // Pick best available voice
+    const voices = window.speechSynthesis.getVoices();
+    const preferred = voices.find(v => /samantha|zira|google us english|microsoft zira/i.test(v.name))
+      || voices.find(v => v.lang === "en-US")
+      || voices[0];
+    if (preferred) utt.voice = preferred;
+    utt.onstart = () => { setVSpeaking(true); setVStatus("Aria is speaking..."); };
+    utt.onend = () => { setVSpeaking(false); setVStatus("Tap the mic to respond"); };
+    window.speechSynthesis.speak(utt);
+  };
+
+  const transcribeWithWhisper = async (audioBlob: Blob): Promise<string> => {
+    const key = geminiKeyRef.current;
+    if (!key) return "";
+    try {
+      const res = await fetch(
+        "https://router.huggingface.co/v1/audio/transcriptions",
+        {
+          method: "POST",
+          headers: { "Authorization": `Bearer ${key}` },
+          body: (() => {
+            const fd = new FormData();
+            fd.append("file", audioBlob, "audio.webm");
+            fd.append("model", "openai/whisper-large-v3-turbo");
+            return fd;
+          })(),
+        }
+      );
+      const data = await res.json();
+      return data.text?.trim() || "";
+    } catch { return ""; }
+  };
+
+  const startListening = async () => {
+    window.speechSynthesis.cancel();
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+        ? "audio/webm;codecs=opus" : "audio/webm";
+      const recorder = new MediaRecorder(stream, { mimeType });
+      vAudioChunksRef.current = [];
+      recorder.ondataavailable = e => { if (e.data.size > 0) vAudioChunksRef.current.push(e.data); };
+      recorder.onstop = async () => {
+        stream.getTracks().forEach(t => t.stop());
+        const audioBlob = new Blob(vAudioChunksRef.current, { type: mimeType });
+        setVStatus("Transcribing with Whisper...");
+        const text = await transcribeWithWhisper(audioBlob);
+        if (text) {
+          setVStatus("Processing...");
+          handleVoiceInput(text);
+        } else {
+          setVStatus("Could not hear — try again");
+        }
+      };
+      vMediaRecorderRef.current = recorder;
+      recorder.start();
+      setVListening(true);
+      setVStatus("🔴 Recording... tap again to stop");
+    } catch {
+      // Fallback to browser SpeechRecognition
+      const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (!SR) { setVStatus("Microphone access denied"); return; }
+      const recog = new SR();
+      vRecogRef.current = recog;
+      recog.lang = "en-US";
+      recog.continuous = false;
+      recog.interimResults = false;
+      recog.onstart = () => { setVListening(true); setVStatus("Listening..."); };
+      recog.onresult = (e: any) => {
+        setVListening(false);
+        setVStatus("Processing...");
+        handleVoiceInput(e.results[0][0].transcript);
+      };
+      recog.onerror = () => { setVListening(false); setVStatus("Could not hear — try again"); };
+      recog.onend = () => setVListening(false);
+      recog.start();
+    }
+  };
+
+  const stopListening = () => {
+    if (vMediaRecorderRef.current?.state === "recording") {
+      vMediaRecorderRef.current.stop();
+    }
+    vRecogRef.current?.stop();
+    setVListening(false);
+    setVStatus("Processing...");
+  };
+
+  const handleVoiceInput = async (text: string) => {
+    const newMsg: VBotMsg = { role: "user", text };
+    setVMsgs(p => [...p, newMsg]);
+    setVLoading(true);
+    setTimeout(() => vEndRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+
+    const history = [...vMsgs, newMsg].slice(-10)
+      .map(m => `${m.role === "user" ? "User" : "Aria"}: ${m.text}`).join("\n");
+    const raw = await callGemini(`${history}\nAria:`, VBOT_PROMPTS[vMode], 300);
+
+    const corrMatch = raw.match(/\[FIX:\s*(.*?)\]/s);
+    const correction = corrMatch?.[1]?.trim();
+    const cleanText = raw.replace(/\[FIX:.*?\]/gs, "").trim();
+
+    setVMsgs(p => [...p, { role: "ai", text: cleanText, correction }]);
+    setVLoading(false);
+    setVStatus("");
+    setTimeout(() => vEndRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+    speakText(raw);
   };
 
   const sendChat = async () => {
@@ -700,16 +1028,108 @@ JSON: [{"type":"hot|wiki|paper|social","tag":"Nguồn/Chủ đề","title":"Tiê
     const msg = chatInput; setChatInput("");
     setChatMsgs(p => [...p, { role:"user", text:msg }]);
     setChatLoading(true);
-    const ctx = translatedText ? `Tài liệu đã dịch:\n${translatedText}\n\n` : "";
-    const text = await callClaude(`${ctx}Câu hỏi: ${msg}`, "Chuyên gia AI giải thích tài liệu bằng tiếng Việt.");
+    const ctx = translatedText ? `Tài liệu đã dịch:\n${translatedText.slice(0, 2000)}\n\n` : "";
+    const text = await callGemini(`${ctx}Câu hỏi: ${msg}`, "Chuyên gia AI giải thích tài liệu bằng tiếng Việt, súc tích và rõ ràng.");
     setChatMsgs(p => [...p, { role:"ai", text }]); setChatLoading(false);
   };
 
+  // ── Game helpers ─────────────────────────────────────────────────────────
+  const getRank = (x: number) => RANKS.reduce((acc, r) => x >= r.min ? r : acc, RANKS[0]);
+  const getLevel = (x: number) => {
+    let lv = 1, needed = 100, rem = x;
+    while (rem >= needed) { rem -= needed; lv++; needed = lv * 100; }
+    return lv;
+  };
+  const getLevelProgress = (x: number) => {
+    let lv = 1, needed = 100, rem = x;
+    while (rem >= needed) { rem -= needed; lv++; needed = lv * 100; }
+    return { cur: rem, needed, pct: (rem / needed) * 100 };
+  };
+
+  const getDailyQuests = () => {
+    const seed = new Date().toDateString().split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+    const chosen: number[] = [];
+    let s = seed;
+    while (chosen.length < 3) {
+      s = Math.abs((s * 1664525 + 1013904223) | 0);
+      const idx = s % QUEST_POOL.length;
+      if (!chosen.includes(idx)) chosen.push(idx);
+    }
+    return chosen.map(i => QUEST_POOL[i]);
+  };
+
+  const checkAchievements = (stats: typeof gameStats, xpVal: number, streakVal: number) => {
+    const checks: {[id:string]: boolean} = {
+      first_xp:    xpVal >= 1,
+      xp_300:      xpVal >= 300,
+      xp_800:      xpVal >= 800,
+      xp_2000:     xpVal >= 2000,
+      xp_4000:     xpVal >= 4000,
+      streak_3:    streakVal >= 3,
+      streak_7:    streakVal >= 7,
+      tasks_5:     stats.totalTasksDone >= 5,
+      tasks_20:    stats.totalTasksDone >= 20,
+      interview_1: stats.interviewsDone >= 1,
+      translate_1: stats.translationsDone >= 1,
+      perfect_day: stats.perfectDays >= 1,
+    };
+    const newUnlocks = ACHIEVEMENTS_DEF.filter(a => checks[a.id]).map(a => a.id);
+    setUnlockedAchievements(prev => {
+      const merged = [...new Set([...prev, ...newUnlocks])];
+      localStorage.setItem("puc_achievements", JSON.stringify(merged));
+      return merged;
+    });
+  };
+
+  const addXP = (amount: number) => {
+    setXp(x => {
+      const nx = x + amount;
+      localStorage.setItem("puc_xp", String(nx));
+      // Update streak
+      const today = new Date().toDateString();
+      try {
+        const sd = JSON.parse(localStorage.getItem("puc_streak_v2") || "null");
+        if (!sd || sd.last !== today) {
+          const yesterday = new Date(Date.now() - 86400000).toDateString();
+          const newCount = sd?.last === yesterday ? (sd.count + 1) : 1;
+          setStreak(newCount);
+          localStorage.setItem("puc_streak_v2", JSON.stringify({ last: today, count: newCount }));
+        }
+      } catch {}
+      return nx;
+    });
+  };
+
+  const completeQuest = (questId: string, questXp: number) => {
+    if (dailyQuestsDone.includes(questId)) return;
+    const newDone = [...dailyQuestsDone, questId];
+    setDailyQuestsDone(newDone);
+    localStorage.setItem("puc_daily_quests", JSON.stringify({ date: new Date().toDateString(), done: newDone }));
+    addXP(questXp);
+    const newStats = { ...gameStats, questsDone: gameStats.questsDone + 1 };
+    const dailyTotal = getDailyQuests().length;
+    if (newDone.length >= dailyTotal) {
+      newStats.perfectDays = gameStats.perfectDays + 1;
+    }
+    setGameStats(newStats);
+    localStorage.setItem("puc_game_stats", JSON.stringify(newStats));
+    checkAchievements(newStats, xp + questXp, streak);
+  };
+
+  // ── Roadmap tasks ─────────────────────────────────────────────────────────
   const toggleTask = (id: number) => {
     setTasks(prev => prev.map(t => {
       if (t.id !== id) return t;
       const nd = !t.done;
-      setXp(x => nd ? x + t.xp : Math.max(0, x - t.xp));
+      if (nd) {
+        addXP(t.xp);
+        const ns = { ...gameStats, totalTasksDone: gameStats.totalTasksDone + 1 };
+        setGameStats(ns);
+        localStorage.setItem("puc_game_stats", JSON.stringify(ns));
+        checkAchievements(ns, xp + t.xp, streak);
+      } else {
+        setXp(x => Math.max(0, x - t.xp));
+      }
       return { ...t, done: nd };
     }));
   };
@@ -722,20 +1142,55 @@ JSON: [{"type":"hot|wiki|paper|social","tag":"Nguồn/Chủ đề","title":"Tiê
     setTasks(prev => prev.filter(t => t.id!==id));
   };
 
+  // ── Interview ─────────────────────────────────────────────────────────────
   const submitAnswer = async (idx: number) => {
     const ans = answers[idx];
     if (!ans?.trim()) return;
+    const q = ivDisplayed[idx];
+    if (!q) return;
     setFeedbackLoading(p => ({ ...p, [idx]:true }));
-    const text = await callClaude(
-      `Interviewer AI/ML senior. Đánh giá:\nCâu hỏi: ${INTERVIEW_QS[idx].q}\nTrả lời: ${ans}\n\n1. Cho điểm 1-10\n2. Điểm mạnh\n3. Cần cải thiện\n4. Gợi ý tốt hơn\nBắt đầu bằng "Điểm: X/10"`,
-      "Interviewer AI/ML senior. Đánh giá khách quan bằng tiếng Việt."
+    const text = await callGemini(
+      `Đóng vai interviewer kỹ thuật senior tại ${q.company}. Đánh giá câu trả lời sau:
+Bài toán: ${q.title} (${q.difficulty}) — Topics: ${q.topics}
+Link: ${q.link}
+Câu trả lời/approach của ứng viên: ${ans}
+
+Đánh giá: độ chính xác thuật toán, time/space complexity, edge cases, gợi ý cải thiện.
+Bắt đầu bằng "Điểm: X/10". Trả lời bằng tiếng Việt.`,
+      "Interviewer kỹ thuật senior. Đánh giá khách quan, xây dựng."
     );
     setFeedbacks(p => ({ ...p, [idx]:text }));
     setFeedbackLoading(p => ({ ...p, [idx]:false }));
+    const ns = { ...gameStats, interviewsDone: gameStats.interviewsDone + 1 };
+    setGameStats(ns);
+    localStorage.setItem("puc_game_stats", JSON.stringify(ns));
+    checkAchievements(ns, xp, streak);
+  };
+
+  const nextQuestion = (idx: number) => {
+    const pool = ivPoolRef.current;
+    const usedLinks = new Set(ivDisplayed.map(q => q.link));
+    const next = pool.find(q => !usedLinks.has(q.link));
+    if (!next) return;
+    setIvDisplayed(prev => {
+      const updated = [...prev];
+      updated[idx] = next;
+      return updated;
+    });
+    setAnswers(p => { const n = {...p}; delete n[idx]; return n; });
+    setFeedbacks(p => { const n = {...p}; delete n[idx]; return n; });
+    setOpenQ(null);
+    // rotate pool so next call picks a different question
+    const i = pool.indexOf(next);
+    ivPoolRef.current = [...pool.slice(i+1), ...pool.slice(0,i+1)];
   };
 
   const xpPct = Math.min((xp / 500) * 100, 100);
   const doneTasks = tasks.filter(t => t.done).length;
+  const currentRank = getRank(xp);
+  const currentLevel = getLevel(xp);
+  const levelProgress = getLevelProgress(xp);
+  const dailyQuests = getDailyQuests();
 
   return (
     <div>
@@ -747,7 +1202,6 @@ JSON: [{"type":"hot|wiki|paper|social","tag":"Nguồn/Chủ đề","title":"Tiê
             <span style={{fontSize:"0.8rem",color:"var(--muted)"}}>{article.tag} · {article.meta}</span>
           </div>
           <div className="article-split">
-            {/* LEFT — Article content */}
             <div className="article-split-left">
               <div className="article-inner">
                 <span className="article-tag">{article.tag}</span>
@@ -756,14 +1210,13 @@ JSON: [{"type":"hot|wiki|paper|social","tag":"Nguồn/Chủ đề","title":"Tiê
                   <span>{article.meta}</span>
                   <a href={article.url} target="_blank" rel="noreferrer" className="article-source-link">↗ Xem bài gốc</a>
                 </div>
-
                 {article.loading
                   ? <div style={{textAlign:"center",padding:"3rem",color:"var(--muted)"}}>
-                      <span className="loading-dots">Claude đang dịch & biên tập bài viết</span>
+                      <span className="loading-dots">Claude đang biên soạn bài viết</span>
                     </div>
                   : <>
                       <div className="article-body">
-                        {article.body.split("\n\n").map((p, i) => <p key={i}>{p}</p>)}
+                        {(article.body || "").split("\n\n").map((p, i) => <p key={i}>{p}</p>)}
                       </div>
                       {article.glossary.length > 0 && (
                         <div className="article-glossary">
@@ -783,45 +1236,37 @@ JSON: [{"type":"hot|wiki|paper|social","tag":"Nguồn/Chủ đề","title":"Tiê
                 }
               </div>
             </div>
-
-            {/* RIGHT — AI Chat panel */}
             <div className="article-split-right">
-              <div className="art-chat-header">
-                💬 Thảo luận với AI về bài viết này
-              </div>
+              <div className="art-chat-header">💬 Thảo luận với Claude về bài này</div>
               <div className="art-chat-msgs">
                 {artChatMsgs.length === 0 && (
                   <div style={{fontSize:"0.8rem",color:"var(--muted)",textAlign:"center",padding:"1.5rem 1rem",lineHeight:1.7}}>
-                    {article.loading
-                      ? "Đợi bài tải xong để bắt đầu thảo luận..."
-                      : "Hỏi bất kỳ điều gì về bài viết — thuật ngữ, khái niệm, ứng dụng thực tế..."}
+                    {!geminiKey ? "Nhập HuggingFace token để chat về bài viết..." : "Hỏi bất kỳ điều gì về bài viết — thuật ngữ, khái niệm, ứng dụng thực tế..."}
                   </div>
                 )}
                 {artChatMsgs.map((m,i) => (
                   <div key={i} className={`art-chat-msg ${m.role}`}>{m.text}</div>
                 ))}
                 {artChatLoading && (
-                  <div className="art-chat-msg ai"><span className="loading-dots">AI đang trả lời</span></div>
+                  <div className="art-chat-msg ai"><span className="loading-dots">Claude đang trả lời</span></div>
                 )}
                 <div ref={artChatEndRef} />
               </div>
               <div className="art-chat-input-row">
                 <input
                   className="art-chat-input"
-                  placeholder="Hỏi về bài viết..."
+                  placeholder={geminiKey ? "Hỏi về bài viết..." : "Cần HuggingFace token..."}
                   value={artChatInput}
                   onChange={e => setArtChatInput(e.target.value)}
                   onKeyDown={e => e.key==="Enter" && !artChatLoading && sendArtChat()}
-                  disabled={article.loading}
+                  disabled={!geminiKey || article.loading}
                 />
                 <button
                   className="ai-btn"
                   style={{padding:"0.45rem 0.85rem",fontSize:"0.78rem"}}
                   onClick={sendArtChat}
-                  disabled={artChatLoading || !artChatInput.trim() || article.loading}
-                >
-                  Gửi
-                </button>
+                  disabled={artChatLoading || !artChatInput.trim() || !geminiKey || article.loading}
+                >Gửi</button>
               </div>
             </div>
           </div>
@@ -833,25 +1278,17 @@ JSON: [{"type":"hot|wiki|paper|social","tag":"Nguồn/Chủ đề","title":"Tiê
         <div className="nav-inner">
           <span className="nav-logo" onClick={() => scrollTo("hero")}>Puc</span>
           <div className="nav-links">
-            {[["Home","hero"],["AI News","news"],["Dịch Tài Liệu","translator"],["Học AI","roadmap"],["Phỏng Vấn","interview"]].map(([l,id]) => (
+            {[["Home","hero"],["AI News","news"],["Luyện Tiếng Anh","translator"],["Học AI","roadmap"],["Phỏng Vấn","interview"]].map(([l,id]) => (
               <a key={l} className="nav-link" onClick={() => scrollTo(id)}>{l}</a>
             ))}
           </div>
-          <button className="nav-cta" onClick={() => scrollTo("translator")}>Analyze Document</button>
+          <button className="nav-cta" onClick={() => scrollTo("translator")}>Practice English</button>
         </div>
       </nav>
 
       {/* HERO */}
       <section id="hero" className="hero">
-        <video 
-          ref={videoRef} 
-          className="hero-video" 
-          src="/hero.mp4" 
-          autoPlay 
-          loop 
-          muted 
-          playsInline 
-        />
+        <video ref={videoRef} className="hero-video" src="/hero.mp4" autoPlay loop muted playsInline />
         <div className="hero-overlay" />
         <div className="hero-content">
           <div className="hero-name"><span>Ngọc </span><em>Phúc</em></div>
@@ -869,30 +1306,41 @@ JSON: [{"type":"hot|wiki|paper|social","tag":"Nguồn/Chủ đề","title":"Tiê
           <div className="section-label">🗞 AI NEWS HÔM NAY</div>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:"2rem",flexWrap:"wrap",gap:"1rem"}}>
             <div>
-              <div className="section-title">Tin AI mới nhất</div>
-              <div className="section-sub">Tin hot · Wikipedia AI · Research Papers · Mạng xã hội — Dịch & phân tích bởi Claude</div>
+              <div className="section-title">Tech & AI News</div>
+              <div className="section-sub">Hacker News · Dev.to · Wikipedia — pool lớn, không trùng lặp</div>
             </div>
-            <button className="ai-btn" onClick={refreshNews} disabled={newsLoading}>
-              {newsLoading ? <span className="loading-dots">Đang tải</span> : "↻ Refresh tin mới"}
+            <button className="ai-btn" onClick={fetchAndBuildNews} disabled={newsLoading}>
+              {newsLoading ? <span className="loading-dots">Đang tải</span> : "🔄 Bài tiếp theo"}
             </button>
           </div>
+          {news.length === 0 && newsLoading && (
+            <div style={{textAlign:"center",padding:"3rem",color:"var(--muted)"}}>
+              <span className="loading-dots">Đang tải bài viết</span>
+            </div>
+          )}
           <div className="news-scroll" ref={newsScrollRef}>
             <div className="news-scroll-inner">
               {news.map((n, i) => (
-                <div key={i} className="news-card" onClick={() => openArticle(i)}>
+                <div key={n.url+i} className="news-card" onClick={() => openArticle(i)}>
                   <div style={{display:"flex",gap:"0.4rem",flexWrap:"wrap",marginBottom:"0.75rem"}}>
-                    {n.type && (
-                      <span className={`news-type-badge news-type-${n.type}`}>
-                        {n.type==="wiki"?"📚 Wiki":n.type==="paper"?"🔬 Research":n.type==="hot"?"🔥 Hot":"📱 Social"}
-                      </span>
-                    )}
-                    <span className="news-tag" style={{marginBottom:0}}>{n.tag}</span>
+                    <span className={`news-type-badge ${n.type==="wiki"?"news-type-wiki":n.type==="devto"||n.type==="reddit"?"news-type-social":n.type==="github"?"news-type-paper":"news-type-hot"}`}>
+                      {n.type==="wiki"?"📚 Wiki":n.type==="devto"?"✍️ Dev.to":n.type==="github"?"⭐ GitHub":n.type==="reddit"?"🔴 Reddit":"🔥 HN"}
+                    </span>
+                    <span className="news-tag" style={{marginBottom:0}}>{n.source}</span>
                   </div>
                   <div className="news-title">{n.title}</div>
-                  <div className="news-desc">{n.desc}</div>
-                  <div className="news-meta">{n.meta}</div>
+                  {n.keywords.length > 0 && (
+                    <div style={{display:"flex",flexWrap:"wrap",gap:"0.35rem",margin:"0.6rem 0 0.5rem"}}>
+                      {n.keywords.map((kw,ki) => (
+                        <span key={ki} style={{fontSize:"0.63rem",padding:"0.15rem 0.55rem",borderRadius:"999px",background:"rgba(255,255,255,0.06)",color:"rgba(255,255,255,0.5)",border:"1px solid rgba(255,255,255,0.1)",letterSpacing:"0.04em"}}>
+                          {kw}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <div className="news-meta" style={{marginTop:"0.5rem"}}>{n.meta}</div>
                   <a href={n.url} target="_blank" rel="noreferrer" className="news-source-link" onClick={e => e.stopPropagation()}>
-                    ↗ {n.source}
+                    ↗ Read original
                   </a>
                 </div>
               ))}
@@ -901,133 +1349,224 @@ JSON: [{"type":"hot|wiki|paper|social","tag":"Nguồn/Chủ đề","title":"Tiê
         </div>
       </div>
 
-      {/* TRANSLATOR */}
+      {/* VOICE BOT */}
       <div className="section-wrap" id="translator">
         <div className="section">
-          <div className="section-label">🤖 AI DOC TRANSLATOR</div>
-          <div className="section-title">Dịch tài liệu AI</div>
-          <div className="section-sub">Paste tài liệu tiếng Anh → Claude dịch + giải thích thuật ngữ</div>
-          <div className="translator-box">
-            <div className="translator-top">
-              <div className="trans-panel left">
-                <div className="trans-label-sm">📄 Tài liệu gốc (tiếng Anh)</div>
-                <textarea className="trans-textarea" placeholder="Paste tài liệu AI cần dịch vào đây..." value={inputText} onChange={e => setInputText(e.target.value)} />
-              </div>
-              <div className="trans-panel">
-                <div className="trans-label-sm">🇻🇳 Bản dịch tiếng Việt</div>
-                <textarea className="trans-textarea" placeholder="Bản dịch sẽ hiện ở đây..." value={transLoading ? "Claude đang dịch..." : translatedText} readOnly />
-              </div>
+          <div className="section-label">🎙️ VOICE ENGLISH PRACTICE</div>
+          <div className="section-title">Luyện nói tiếng Anh</div>
+          <div className="section-sub">Nói chuyện trực tiếp với Aria — AI nghe giọng bạn, trả lời bằng giọng nói, sửa ngữ pháp realtime</div>
+
+          {!geminiKey ? (
+            <div className="api-key-banner">
+              <span>🔑</span>
+              <span>Nhập HuggingFace token (hf_...) — miễn phí tại <a href="https://huggingface.co/settings/tokens/new?ownUserPermissions=inference.serverless.write&tokenType=fineGrained" target="_blank" rel="noreferrer" style={{color:"#a78bfa"}}>huggingface.co/settings/tokens</a></span>
+              <input className="api-key-input" placeholder="hf_..." value={keyInput} onChange={e => setKeyInput(e.target.value)} onKeyDown={e => e.key==="Enter" && saveKey()} type="password" />
+              <button className="ai-btn" style={{borderRadius:"8px",padding:"0.45rem 1rem"}} onClick={saveKey}>Lưu</button>
             </div>
-            <div className="translator-bottom">
-              <span style={{fontSize:"0.78rem",color:"var(--muted)"}}>Powered by Claude Sonnet</span>
-              <button className="ai-btn" onClick={translateDoc} disabled={transLoading || !inputText.trim()}>
-                {transLoading ? <span className="loading-dots">Đang dịch</span> : "✨ Translate"}
+          ) : (
+            <div style={{display:"flex",alignItems:"center",gap:"0.75rem",marginBottom:"1.5rem",fontSize:"0.78rem",color:"var(--muted)"}}>
+              <span style={{color:"#4ade80"}}>✓ HuggingFace token đã kết nối</span>
+              <button onClick={() => { setGeminiKey(""); geminiKeyRef.current = ""; try { localStorage.removeItem("puc_gemini_key"); } catch {} }} style={{background:"none",border:"none",color:"rgba(255,255,255,0.3)",cursor:"pointer",fontSize:"0.75rem",textDecoration:"underline"}}>Xóa key</button>
+            </div>
+          )}
+
+          <div className="vbot-wrap">
+            {/* Left — orb + controls */}
+            <div className="vbot-left">
+              <div className="vbot-orb" onClick={vListening ? stopListening : startListening}>
+                <div className={`vbot-ring ${vListening?"listening":vSpeaking?"speaking":""}`} />
+                <div className={`vbot-ring2 ${vListening?"listening":vSpeaking?"speaking":""}`} />
+                <div className="vbot-orb-inner">{vListening?"🎙️":vSpeaking?"🔊":"🤖"}</div>
+              </div>
+              <div style={{textAlign:"center"}}>
+                <div style={{fontFamily:"var(--font-name)",fontSize:"1.2rem",marginBottom:"0.25rem"}}>Aria</div>
+                <div style={{fontSize:"0.7rem",color:"#4ade80",display:"flex",alignItems:"center",gap:"0.3rem",justifyContent:"center"}}>
+                  <span style={{width:6,height:6,borderRadius:"50%",background:"#4ade80",display:"inline-block",flexShrink:0}}/>
+                  Free · Web Speech API · 24/7
+                </div>
+              </div>
+              <button
+                className={`vbot-mic-btn${vListening?" listening":""}`}
+                onClick={vListening ? stopListening : startListening}
+                disabled={!geminiKey || vLoading}
+              >
+                {vListening ? "⏹ Stop" : vSpeaking ? "🔊 Speaking..." : "🎙️ Hold to Talk"}
               </button>
+              <div className={`vbot-status-text${vListening||vSpeaking?" active":""}`}>{vStatus}</div>
+              <div className="vbot-modes-row">
+                {(["free","grammar","joke","debate"] as VBotMode[]).map(m => (
+                  <button key={m} className={`vbot-mode-chip${vMode===m?" active":""}`} onClick={() => { setVMode(m); setVMsgs([]); window.speechSynthesis.cancel(); setVStatus("Mode changed — tap mic to start"); }}>
+                    {m==="free"?"💬 Free":m==="grammar"?"✏️ Grammar":m==="joke"?"😂 Jokes":"⚡ Debate"}
+                  </button>
+                ))}
+              </div>
             </div>
-            {(chatMsgs.length > 0 || translatedText) && (
-              <>
-                <div className="chat-area">
-                  {chatMsgs.length === 0 && <div style={{fontSize:"0.82rem",color:"var(--muted)",textAlign:"center"}}>Hỏi Claude về nội dung tài liệu vừa dịch...</div>}
-                  {chatMsgs.map((m,i) => <div key={i} className={`chat-msg ${m.role}`}>{m.text}</div>)}
-                  {chatLoading && <div className="chat-msg ai"><span className="loading-dots">Claude đang trả lời</span></div>}
-                  <div ref={chatEndRef} />
-                </div>
-                <div className="chat-input-row">
-                  <input className="chat-input" placeholder="Hỏi thêm về tài liệu..." value={chatInput} onChange={e => setChatInput(e.target.value)} onKeyDown={e => e.key==="Enter" && !chatLoading && sendChat()} />
-                  <button className="ai-btn" onClick={sendChat} disabled={chatLoading || !chatInput.trim()}>Gửi</button>
-                </div>
-              </>
-            )}
+
+            {/* Right — transcript */}
+            <div className="vbot-right">
+              <div className="vbot-transcript">
+                {vMsgs.length === 0 && (
+                  <div style={{textAlign:"center",padding:"2.5rem 1rem",color:"var(--muted)"}}>
+                    <div style={{fontSize:"2rem",marginBottom:"0.75rem"}}>🎙️</div>
+                    <div style={{fontSize:"0.88rem",marginBottom:"0.4rem"}}>Tap the mic and start speaking</div>
+                    <div style={{fontSize:"0.75rem"}}>Aria will reply out loud — works in Chrome & Safari</div>
+                  </div>
+                )}
+                {vMsgs.map((m, i) => (
+                  <div key={i} className={`vbot-turn ${m.role}`}>
+                    <div className={`vbot-bubble ${m.role}`}>{m.text}</div>
+                    {m.correction && <div className="vbot-correction">✏️ {m.correction}</div>}
+                  </div>
+                ))}
+                {vLoading && (
+                  <div className="vbot-turn ai">
+                    <div className="vbot-bubble ai"><span className="loading-dots">Aria is thinking</span></div>
+                  </div>
+                )}
+                <div ref={vEndRef} />
+              </div>
+              {/* Also allow text input */}
+              <div className="vbot-input-row">
+                <input
+                  className="vbot-text-input"
+                  placeholder="Or type here if mic doesn't work..."
+                  value={vInput}
+                  onChange={e => setVInput(e.target.value)}
+                  onKeyDown={e => { if(e.key==="Enter" && vInput.trim() && !vLoading) { handleVoiceInput(vInput); setVInput(""); } }}
+                  disabled={!geminiKey}
+                />
+                <button className="vbot-send-btn" onClick={() => { if(vInput.trim()) { handleVoiceInput(vInput); setVInput(""); } }} disabled={!vInput.trim() || vLoading || !geminiKey}>➤</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* ROADMAP */}
+      {/* GAME MODE */}
       <div className="section-wrap green" id="roadmap">
         <div className="section">
-          <div className="section-label">🎮 HỌC AI — GAME MODE</div>
-          <div className="section-title">Lộ trình học AI</div>
-          <div className="section-sub">Tự set task, tự cộng XP — hoàn thành để lên level 🏆</div>
-          <div className="roadmap-header">
-            <div className="xp-bar-wrap">
-              <span className="xp-label">⚡ {xp} XP</span>
-              <div className="xp-bar"><div className="xp-fill" style={{width:`${xpPct}%`}} /></div>
-              <span style={{fontSize:"0.75rem",color:"var(--muted)"}}>Level {Math.floor(xp/100)+1}</span>
+          <div className="section-label">🎮 GAME MODE</div>
+          <div className="section-title">AI Learning RPG</div>
+          <div className="section-sub">Hoàn thành quests, lên rank, mở khoá skill — học AI theo cách của game thủ</div>
+
+          {/* Stats Dashboard */}
+          <div className="gm-stats">
+            <div className="rank-badge">
+              <span className="rank-icon" style={{filter:`drop-shadow(0 0 10px ${currentRank.glow})`}}>{currentRank.icon}</span>
+              <span className="rank-name" style={{color:currentRank.color}}>{currentRank.name}</span>
             </div>
-            <span className="streak">🔥 {streak} ngày streak</span>
-          </div>
-          <div className="today-box">
-            <div className="today-header">
-              <div className="today-title">📅 Tasks hôm nay — {doneTasks}/{tasks.length} hoàn thành</div>
-            </div>
-            <div className="task-list">
-              {tasks.map(t => (
-                <div key={t.id} className={`task-item${t.done?" done":""}`}>
-                  <div className={`task-check${t.done?" checked":""}`} onClick={() => toggleTask(t.id)}>
-                    {t.done && <span style={{fontSize:"0.7rem",color:"#000"}}>✓</span>}
-                  </div>
-                  <input className={`task-text-input${t.done?" done-text":""}`} value={t.text} placeholder="Nhập task..." onChange={e => updateTask(t.id,"text",e.target.value)} disabled={t.done} />
-                  <input className="task-xp-input" value={t.xp} type="number" min={1} onChange={e => updateTask(t.id,"xp",e.target.value)} disabled={t.done} title="XP" />
-                  <span style={{fontSize:"0.7rem",color:"var(--accent)",minWidth:"24px"}}>XP</span>
-                  <button className="task-delete" onClick={() => deleteTask(t.id)}>×</button>
+            <div className="level-info">
+              <div className="level-row">
+                <span className="level-title">Level {currentLevel}</span>
+                <div className="xp-bar-lg">
+                  <div className="xp-fill-lg" style={{width:`${levelProgress.pct}%`, background:`linear-gradient(90deg, ${currentRank.color}, ${currentRank.glow.replace('0.','0.9')})`}} />
                 </div>
-              ))}
-              <button className="add-task-btn" onClick={addTask}>+ Thêm task mới</button>
+                <span className="xp-caption">{levelProgress.cur}/{levelProgress.needed}</span>
+              </div>
+              <div style={{display:"flex",gap:"1.5rem",flexWrap:"wrap"}}>
+                <span style={{fontSize:"0.75rem",color:"var(--muted)"}}>⚡ <span style={{color:"var(--accent)",fontWeight:500}}>{xp}</span> XP tổng</span>
+                <span style={{fontSize:"0.75rem",color:"var(--muted)"}}>🏅 Rank <span style={{color:currentRank.color,fontWeight:500}}>{currentRank.name}</span></span>
+<span style={{fontSize:"0.75rem",color:"var(--muted)"}}>🏆 <span style={{color:"var(--fg)",fontWeight:500}}>{unlockedAchievements.length}</span>/{ACHIEVEMENTS_DEF.length} badges</span>
+              </div>
+            </div>
+            <div className="gm-right">
+              <span className="streak-num">{streak}</span>
+              <span className="streak-lbl">🔥 streak</span>
             </div>
           </div>
-          <div className="roadmap-tabs">
-            {ROADMAP.map((r,i) => (
-              <button key={i} className={`tab${activeLevel===i?" active":""}`} onClick={() => setActiveLevel(i)}>
-                {r.icon} {r.level}{r.current?" ← đang học":""}
+
+          {/* Tab nav */}
+          <div className="gm-tabs">
+            {(["tasks","achievements"] as const).map(tab => (
+              <button key={tab} className={`gm-tab${gameTab===tab?" active":""}`} onClick={() => setGameTab(tab)}>
+                {tab==="tasks"?"✅ Tasks":"🏅 Achievements"}
               </button>
             ))}
           </div>
-          <div className="topic-grid">
-            {ROADMAP[activeLevel].topics.map((t,i) => (
-              <div key={i} className={`topic-card${ROADMAP[activeLevel].current?" active-topic":""}`}>
-                <div style={{fontSize:"1.5rem",marginBottom:"0.5rem"}}>{["🧠","👁","💬","✨"][activeLevel]}</div>
-                <div className="topic-name">{t.name}</div>
-                <div className="topic-desc">{t.desc}</div>
-                <div className="topic-progress"><div className="topic-fill" style={{width:`${t.progress}%`}} /></div>
-                <div style={{fontSize:"0.7rem",color:"var(--muted)",marginTop:"0.4rem"}}>{t.progress}% hoàn thành</div>
+
+          {/* Custom Tasks */}
+          {(gameTab === "tasks" || gameTab === "quests" || gameTab === "skills") && (
+            <div className="today-box">
+              <div className="today-header">
+                <div className="today-title">📅 Custom Tasks — {doneTasks}/{tasks.length} hoàn thành</div>
               </div>
-            ))}
-          </div>
+              <div className="task-list">
+                {tasks.map(t => (
+                  <div key={t.id} className={`task-item${t.done?" done":""}`}>
+                    <div className={`task-check${t.done?" checked":""}`} onClick={() => toggleTask(t.id)}>
+                      {t.done && <span style={{fontSize:"0.7rem",color:"#000"}}>✓</span>}
+                    </div>
+                    <input className={`task-text-input${t.done?" done-text":""}`} value={t.text} placeholder="Nhập task..." onChange={e => updateTask(t.id,"text",e.target.value)} disabled={t.done} />
+                    <input className="task-xp-input" value={t.xp} type="number" min={1} onChange={e => updateTask(t.id,"xp",e.target.value)} disabled={t.done} title="XP" />
+                    <span style={{fontSize:"0.7rem",color:"var(--accent)",minWidth:"24px"}}>XP</span>
+                    <button className="task-delete" onClick={() => deleteTask(t.id)}>×</button>
+                  </div>
+                ))}
+                <button className="add-task-btn" onClick={addTask}>+ Thêm task mới</button>
+              </div>
+            </div>
+          )}
+
+          {/* Achievements */}
+          {gameTab === "achievements" && (
+            <div>
+              <div style={{fontSize:"0.72rem",color:"var(--muted)",marginBottom:"1rem"}}>
+                {unlockedAchievements.length}/{ACHIEVEMENTS_DEF.length} badges đã mở khoá
+              </div>
+              <div className="achiev-grid">
+                {ACHIEVEMENTS_DEF.map(a => {
+                  const unlocked = unlockedAchievements.includes(a.id);
+                  return (
+                    <div key={a.id} className={`achiev-card${unlocked?" unlocked":" locked"}`}>
+                      <span className="ach-icon" style={unlocked?{filter:`drop-shadow(0 0 6px ${a.color})`}:{}}>{a.icon}</span>
+                      <span className="ach-name">{a.name}</span>
+                      <span className="ach-desc">{a.desc}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
       {/* INTERVIEW */}
       <div className="section-wrap dark" id="interview">
         <div className="section">
-          <div className="section-label">💼 PHỎNG VẤN AI</div>
+          <div className="section-label">💼 PHỎNG VẤN KỸ THUẬT</div>
           <div className="section-title">Luyện phỏng vấn</div>
-          <div className="section-sub">Trả lời → Claude đóng vai interviewer cho điểm & lời khuyên</div>
+          <div className="section-sub">Câu hỏi thực từ Google, Meta, OpenAI, Nvidia… — nhấn câu tiếp theo để đổi bài</div>
+          {ivPoolLoading ? (
+            <div style={{textAlign:"center",padding:"3rem",color:"var(--muted)"}}>
+              <span className="loading-dots">Đang tải câu hỏi từ các công ty</span>
+            </div>
+          ) : (
           <div className="interview-list">
-            {INTERVIEW_QS.map((item,i) => (
-              <div key={i} className="interview-item">
+            {ivDisplayed.map((item,i) => (
+              <div key={item.link+i} className="interview-item">
                 <div className="interview-q" onClick={() => setOpenQ(openQ===i?null:i)}>
-                  <span className="interview-q-text">{i+1}. {item.q}</span>
-                  <div style={{display:"flex",gap:"0.5rem",alignItems:"center",flexShrink:0}}>
-                    <span className={`interview-level level-${item.level}`}>{item.level}</span>
-                    <span style={{color:"var(--muted)",fontSize:"0.8rem"}}>{openQ===i?"▲":"▼"}</span>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{display:"flex",gap:"0.5rem",alignItems:"center",marginBottom:"0.3rem",flexWrap:"wrap"}}>
+                      <span style={{fontSize:"0.65rem",padding:"0.15rem 0.55rem",borderRadius:"999px",background:"rgba(99,102,241,0.2)",color:"#818cf8",fontWeight:600,letterSpacing:"0.05em"}}>{item.company}</span>
+                      <span className={`interview-level level-${item.difficulty.toLowerCase()}`}>{item.difficulty}</span>
+                    </div>
+                    <span className="interview-q-text">{i+1}. {item.title}</span>
+                    {item.topics && <div style={{fontSize:"0.7rem",color:"var(--muted)",marginTop:"0.25rem",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{item.topics}</div>}
                   </div>
+                  <span style={{color:"var(--muted)",fontSize:"0.8rem",flexShrink:0,marginLeft:"0.75rem"}}>{openQ===i?"▲":"▼"}</span>
                 </div>
                 <div className={`interview-body${openQ===i?" open":""}`}>
-                  <div style={{fontSize:"0.78rem",color:"var(--muted)",marginBottom:"0.6rem"}}>✍️ Câu trả lời của bạn:</div>
-                  <textarea className="interview-answer-area" placeholder="Nhập câu trả lời của bạn vào đây..." value={answers[i]||""} onChange={e => setAnswers(p => ({...p,[i]:e.target.value}))} />
-                  <button className="ai-btn" style={{marginBottom:"1rem"}} onClick={() => submitAnswer(i)} disabled={feedbackLoading[i] || !answers[i]?.trim()}>
-                    {feedbackLoading[i] ? <span className="loading-dots">Claude đang chấm điểm</span> : "📝 Nộp bài — Claude chấm điểm"}
-                  </button>
-                  {feedbacks[i] && (
-                    <div className="feedback-box">
-                      {feedbacks[i].startsWith("Điểm:") && <div className="score-badge">🏆 {feedbacks[i].split("\n")[0]}</div>}
-                      <div style={{whiteSpace:"pre-line"}}>{feedbacks[i]}</div>
-                    </div>
-                  )}
+                  <div style={{display:"flex",gap:"1rem",alignItems:"center",flexWrap:"wrap"}}>
+                    <a href={item.link} target="_blank" rel="noreferrer" style={{fontSize:"0.82rem",color:"#818cf8",display:"inline-flex",alignItems:"center",gap:"0.3rem"}}>↗ Mở trên LeetCode</a>
+                    <button className="ai-btn" style={{background:"rgba(99,102,241,0.12)",border:"1px solid rgba(99,102,241,0.3)",fontSize:"0.75rem",padding:"0.35rem 0.9rem"}} onClick={() => nextQuestion(i)}>
+                      🔄 Câu tiếp theo
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
+          )}
           <div style={{textAlign:"center",marginTop:"5rem",color:"var(--muted)",fontSize:"0.75rem",letterSpacing:"0.06em"}}>
             © 2026 Puc — Nguyễn Ngọc Phúc. All rights reserved.
           </div>
