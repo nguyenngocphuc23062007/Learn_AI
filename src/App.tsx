@@ -1000,7 +1000,7 @@ export default function PucPortfolio() {
         setNewsLoading(false);
         return;
       }
-
+      // Pool exhausted → fetch fresh from all sources
       // Pool exhausted → fetch fresh from all sources
       const [hnStories, devToItems, wikiItems, ghItems, redditItems] = await Promise.all([
         fetchHNStories(), fetchDevTo(), fetchWikiAI(), fetchGithubTrending(), fetchReddit(),
