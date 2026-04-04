@@ -1,5 +1,6 @@
 import React from "react";
 import { useEffect, useRef, useState } from "react";
+import StudyDashboard from "./StudyDashboard";
 
 const globalStyles = `
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
@@ -1520,7 +1521,7 @@ Bắt đầu bằng "Điểm: X/10". Trả lời bằng tiếng Việt.`,
       )}
 
       {/* NAV */}
-      <nav ref={navRef} className="nav">
+      <nav ref={navRef} className="nav" style={{ display: page === 'projects' ? 'none' : undefined }}>
         <div className="nav-inner">
           <span className="nav-logo" onClick={() => goTo("home")}>Puc</span>
           <div className="nav-links">
@@ -1984,12 +1985,17 @@ Bắt đầu bằng "Điểm: X/10". Trả lời bằng tiếng Việt.`,
 
       </>}
 
+      {/* STUDY DASHBOARD */}
+      {page === 'projects' && (
+        <StudyDashboard onBack={() => goTo('home')} />
+      )}
+
       {/* PLACEHOLDER PAGES */}
-      {(page === 'projects' || page === 'blog' || page === 'contact') && (
+      {(page === 'blog' || page === 'contact') && (
         <div className="placeholder-page">
           <div className="placeholder-badge">Đang xây dựng</div>
           <div className="placeholder-title">
-            {page === 'projects' ? 'Dự Án' : page === 'blog' ? 'Blog' : 'Liên Hệ'}
+            {page === 'blog' ? 'Blog' : 'Liên Hệ'}
           </div>
           <div className="placeholder-sub">Trang này đang được phát triển...</div>
         </div>
